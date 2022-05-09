@@ -3,7 +3,8 @@ pipeline{
     stages{
         stage('Run Collection'){
             steps{
-                sh 'docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman aegis_collection_ci.json --disable-unicode'
+                sh 'docker pull postman/newman'
+                sh 'docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman aegis_collection_ci.json --environment dev_environment.json --disable-unicode'
         }
     }
 }
