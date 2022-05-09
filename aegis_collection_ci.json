@@ -1,0 +1,5979 @@
+{
+	"info": {
+		"_postman_id": "cf8fbe12-88fc-4930-89a1-18533ee9f72a",
+		"name": "Aegis Collection (CI test)",
+		"description": "Aegis Rider API Documentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login(verified user)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"Authorization\", jsonData.data.access);\r",
+											"postman.setEnvironmentVariable(\"User_key\", jsonData.data.user.user_key);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\",\r\n   \"password\": \"testpassword#1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing user by passing email address and correct password in the request body"
+							},
+							"response": [
+								{
+									"name": "Login(verified user)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\",\r\n   \"password\": \"testpassword#1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/sign-in",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"sign-in"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 11:34:19 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "702"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Login successful\",\n    \"data\": {\n        \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2NDc5Njg1OSwianRpIjoiYzJlODVhYjM4NmIxNDE1YmI5ZGY0Y2ZiNzM5NjhiNTAiLCJ1c2VyX3VzZXJfa2V5IjoiNTQ0ZGI4OTItNzNlYi00YTg4LTlkY2QtODZjMmJlYTk5OTY0In0.9Nisn2YWhyuv4HAVpb_2v_Ol3XQqfLx7_fv8Rm7JmDQ\",\n        \"access\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY0Nzk2ODU5LCJqdGkiOiI3MmUzMzQ1OWVlMWM0OTU2YTZjMWFiMGVhYmUwY2EzNiIsInVzZXJfdXNlcl9rZXkiOiI1NDRkYjg5Mi03M2ViLTRhODgtOWRjZC04NmMyYmVhOTk5NjQifQ.mGEGCBatjuNDqOaNGyfpj9Xj8V6PSwZy21YMbr2XHr8\",\n        \"user\": {\n            \"email\": \"testamalitech@gmail.com\",\n            \"user_key\": \"544db892-73eb-4a88-9dcd-86c2bea99964\"\n        }\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Login(unverified user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 320\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('320');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing but unverified user account by passing email address and correct password in the request body"
+							},
+							"response": [
+								{
+									"name": "Login(unverified user)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"unverifieduser@pemess.com\",\r\n    \"password\": \"password\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/sign-in",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"sign-in"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 14:32:02 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "121"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"320\",\n    \"detail\": \"Your account exists but is not verified. Please verify from your email inbox\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Login(non-existing user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 310\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('310');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('User does not exist');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with a non-existing user by passing email address and user password in the request body"
+							},
+							"response": [
+								{
+									"name": "Login(non-existing user)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/sign-in",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"sign-in"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 10:54:39 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "64"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"310\",\n    \"detail\": \"User does not exist\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Login(wrong password)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"  var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message\", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('No active account found with the given credentials');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing user by passing email address and a wrong user password in the request body"
+							},
+							"response": [
+								{
+									"name": "Login(wrong password)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/sign-in",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"sign-in"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 11:36:10 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "63"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "WWW-Authenticate",
+											"value": "Bearer realm=\"api\""
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"detail\": \"No active account found with the given credentials\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Apple Sign in (Mobile App)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"apple_id\": \"002007.162d99d1c043456fad66cb9442d65556.1136\",\r\n  \"email\": \"\",\r\n  \"first_name\":\"\",\r\n  \"last_name\":\"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/apple-login",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"apple-login"
+									]
+								},
+								"description": "Continue with Apple sign in by passing a valid Apple ID to apple_ID key in the request body. email,first_name ,last_name fields  optional"
+							},
+							"response": [
+								{
+									"name": "Apple Sign in (Mobile App)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"apple_id\": \"002007.a148bec5d7f0492cb54ff379035ce7e2.1112\",\r\n  \"email\": \"\",\r\n  \"first_name\":\"\",\r\n  \"last_name\":\"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/apple-login",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"apple-login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 10:55:17 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "763"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Login successful\",\n    \"data\": {\n        \"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2NjY5NTMxNywianRpIjoiMDAyMTc1MTZkNzExNGM0YjlhNjUzOWM3NjI4OGIxM2EiLCJ1c2VyX3VzZXJfa2V5IjoiMTIyMzJkMTktNDY1Yy00MDE5LWIxYWUtYzE1ZTljMWJkOGE1In0.UJkrAzA0V68cRmbMvZjbaMBHMa2XuaihAXv_vc0df_g\",\n        \"access\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY2Njk1MzE3LCJqdGkiOiI0YjFlZTVhM2VjOWY0NDQ5ODRkOGY2NzU3OTEyYjcwNyIsInVzZXJfdXNlcl9rZXkiOiIxMjIzMmQxOS00NjVjLTQwMTktYjFhZS1jMTVlOWMxYmQ4YTUifQ.kvp8KMrghBCGlH7iBdk97ZD6fyCYr5X--vQ-Pmg7oJ0\",\n        \"user\": {\n            \"email\": \"002007.a148bec5d7f0492cb54ff379035ce7e2.1112@example.com\",\n            \"user_key\": \"12232d19-465c-4019-b1ae-c15e9c1bd8a5\"\n        }\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Google Sign in",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"{{$Id_token}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/google-login",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"google-login"
+									]
+								},
+								"description": "Continue with google sign in by passing the id_token signature from google authentication response to **token** key in the request body."
+							},
+							"response": [
+								{
+									"name": "Google Sign in",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"token\": \"{{$Id_token}}\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/google-login",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"google-login"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 10:22:55 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "56"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"error\",\n    \"code\": \"329\",\n    \"detail\": \"Invalid token\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Apple Sign up (Web App)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"cfb9133c2e8654905aaafc664fb06ae8d.0.muvz.Gklff50zmCWv78S6NyUvTw\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/apple-signup",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"apple-signup"
+									]
+								},
+								"description": "Endpoint to sign up with Apple on the web application. \n* Pass signed Apple code  to the **code** key in the request body"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains login request endpoints",
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Registration",
+					"item": [
+						{
+							"name": "Registration(new email)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 201\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('201');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"email\": \"newaccountamalitech@pemess.com\",\r\n \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create a new user account by passing email address and password to the appropriate keys in the request body"
+							},
+							"response": [
+								{
+									"name": "Registration(new email)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"email\": \"newaccountamalitech@pemess.com\",\r\n \"password\": \"password\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/registration",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"registration"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 11:31:26 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "62"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"User created\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Registration(unverified email)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 320\", function () {\r",
+											"    pm.expect(jsonData.status).to.eq('failure');\r",
+											"    pm.expect(jsonData.code).to.eq('320');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create an account with an existing but unverified email address /account by passing an existing but unverified email and password to the appropriate keys in the request body"
+							},
+							"response": [
+								{
+									"name": "Registration(unverified email)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"unverifieduser@pemess.com\",\r\n    \"password\": \"password\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/registration",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"registration"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 11:42:50 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "121"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"320\",\n    \"detail\": \"Your account exists but is not verified. Please verify from your email inbox\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Registration(already existing user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 311\", function () {\r",
+											"    pm.expect(jsonData.status).to.eq('failure');\r",
+											"    pm.expect(jsonData.code).to.eq('311');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('User already exist with same email');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"testpassword#1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create a new account by passing an existing email address and valid password to the appropriate field/keys in the request body"
+							},
+							"response": [
+								{
+									"name": "Registration(already existing user)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"testpassword#1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/registration",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"registration"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 11:44:29 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "79"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"311\",\n    \"detail\": \"User already exist with same email\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Resend verification email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/resend-email",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"resend-email"
+									]
+								},
+								"description": "Resend account verification email by by passing email address to  email key in the request body"
+							},
+							"response": [
+								{
+									"name": "Resend verification email- success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"wihevo9616@richdn.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/resend-email",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"resend-email"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 12:13:11 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "73"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Email verification sent\"\n}"
+								},
+								{
+									"name": "Resend verification email -failure",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"newaccount@pemess.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/resend-email",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"resend-email"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 10:46:32 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "64"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"310\",\n    \"detail\": \"User does not exist\"\n}"
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Password Reset",
+					"item": [
+						{
+							"name": "Forgot Password",
+							"item": [
+								{
+									"name": "Send_Password_Reset_Mail",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													" var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Validate response code is 200\", function () {\r",
+													"    pm.expect(jsonData.code).to.eq('200');\r",
+													"   \r",
+													"});\r",
+													"\r",
+													"pm.test(\"Validate response message \", function () {\r",
+													"     pm.expect(jsonData.detail).to.eq('Password reset code sent successfully');\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}/auth/send-password-reset-mail",
+											"host": [
+												"{{Base_url}}"
+											],
+											"path": [
+												"auth",
+												"send-password-reset-mail"
+											]
+										},
+										"description": "Pass email address to email key in request body to send reset password code"
+									},
+									"response": [
+										{
+											"name": "Send_Password_Reset_Mail - success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{Base_url}}auth/send-password-reset-mail",
+													"host": [
+														"{{Base_url}}auth"
+													],
+													"path": [
+														"send-password-reset-mail"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Server",
+													"value": "nginx/1.21.6"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 28 Apr 2022 12:14:05 GMT"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Content-Length",
+													"value": "87"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept, Origin, Cookie"
+												},
+												{
+													"key": "Allow",
+													"value": "POST, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Strict-Transport-Security",
+													"value": "max-age=31536000; includeSubDomains"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Password reset code sent successfully\"\n}"
+										},
+										{
+											"name": "Send_Password_Reset_Mail- failure",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{Base_url}}auth/send-password-reset-mail",
+													"host": [
+														"{{Base_url}}auth"
+													],
+													"path": [
+														"send-password-reset-mail"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Server",
+													"value": "nginx/1.21.6"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 04 May 2022 10:56:31 GMT"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Content-Length",
+													"value": "79"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept, Origin, Cookie"
+												},
+												{
+													"key": "Allow",
+													"value": "POST, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Strict-Transport-Security",
+													"value": "max-age=31536000; includeSubDomains"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"status\": \"failure\",\n    \"code\": \"333\",\n    \"detail\": \"This email doesn't have an account\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Reset_Password",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													" var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Validate response code is 200\", function () {\r",
+													"    pm.expect(jsonData.code).to.eq('200');\r",
+													"   \r",
+													"});\r",
+													"\r",
+													"pm.test(\"Validate response message \", function () {\r",
+													"     pm.expect(jsonData.detail).to.eq('Password reset successful');\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_key\":\"510d1a9a-8afd-4732-98b9\",\r\n    \"password\":\"testpassword#1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}/auth/reset-password",
+											"host": [
+												"{{Base_url}}"
+											],
+											"path": [
+												"auth",
+												"reset-password"
+											]
+										},
+										"description": "Reset password by passing the user_key in the login user response object and new password in the request body"
+									},
+									"response": [
+										{
+											"name": "Reset_Password",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"user_key\":\"544db892-73eb-4a88-9dcd-86c2bea99964\",\r\n    \"password\":\"testpassword#1\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{Base_url}}auth/reset-password",
+													"host": [
+														"{{Base_url}}auth"
+													],
+													"path": [
+														"reset-password"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Server",
+													"value": "nginx/1.21.6"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 28 Apr 2022 12:15:56 GMT"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Content-Length",
+													"value": "75"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept, Origin, Cookie"
+												},
+												{
+													"key": "Allow",
+													"value": "POST, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Strict-Transport-Security",
+													"value": "max-age=31536000; includeSubDomains"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Password reset successful\"\n}"
+										},
+										{
+											"name": "Reset_Password - failure",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"user_key\":\"\",\r\n    \"password\":\"testpassword#1\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{Base_url}}auth/reset-password",
+													"host": [
+														"{{Base_url}}auth"
+													],
+													"path": [
+														"reset-password"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Server",
+													"value": "nginx/1.21.6"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 04 May 2022 11:02:30 GMT"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Content-Length",
+													"value": "44"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Vary",
+													"value": "Accept, Origin, Cookie"
+												},
+												{
+													"key": "Allow",
+													"value": "POST, OPTIONS"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "Referrer-Policy",
+													"value": "same-origin"
+												},
+												{
+													"key": "Strict-Transport-Security",
+													"value": "max-age=31536000; includeSubDomains"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"status\": \"error\",\n    \"detail\": \"Malformed UUID\"\n}"
+										}
+									]
+								}
+							],
+							"description": "Contains endpoints for resetting password using six digit code",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Change Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Password changed successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"password\": \"testpassword#1\",\r\n    \"new_password\": \"testpassword#1\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/change-password",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"change-password"
+									]
+								},
+								"description": "* Change user account password by passing old password and new password to the request body.\n* Pass **Bearer Authorization** access token from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Change Password- success",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer {{Authorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"password\": \"testpassword#1\",\r\n    \"new_password\": \"testpassword#1\"\r\n    \r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/change-password",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"change-password"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 28 Apr 2022 16:12:18 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "79"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "PUT, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Password changed successfully\"\n}"
+								},
+								{
+									"name": "Change Password- failure",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer {{Authorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"password\": \"testpassw\",\r\n    \"new_password\": \"testpassword#1\"\r\n    \r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}auth/change-password",
+											"host": [
+												"{{Base_url}}auth"
+											],
+											"path": [
+												"change-password"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 11:12:58 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "63"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "PUT, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"324\",\n    \"detail\": \"Password incorrect\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Contains endpoints for Reset Password(Forgot password) and Change account password",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Check User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('User exists');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/auth/check-user",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"auth",
+								"check-user"
+							]
+						},
+						"description": "Check up user  by passing email address in the request body."
+					},
+					"response": [
+						{
+							"name": "Check User - success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}auth/check-user",
+									"host": [
+										"{{Base_url}}auth"
+									],
+									"path": [
+										"check-user"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Check User - failure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\": \"nonexistinguser@gmail.com\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}auth/check-user",
+									"host": [
+										"{{Base_url}}auth"
+									],
+									"path": [
+										"check-user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 May 2022 11:16:05 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "64"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"failure\",\n    \"code\": \"310\",\n    \"detail\": \"User does not exist\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Resend Account Activation Mail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/auth/resend-email",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"auth",
+								"resend-email"
+							]
+						},
+						"description": "API endpoint to resend account verification  mail to users email inbox to confirm or verify an account"
+					},
+					"response": [
+						{
+							"name": "Resend Account Activation Mail - success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}auth/resend-email",
+									"host": [
+										"{{Base_url}}auth"
+									],
+									"path": [
+										"resend-email"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 May 2022 11:18:13 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "73"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Email verification sent\"\n}"
+						},
+						{
+							"name": "Resend Account Activation Mail - failure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}auth/resend-email",
+									"host": [
+										"{{Base_url}}auth"
+									],
+									"path": [
+										"resend-email"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 May 2022 11:19:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "64"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"failure\",\n    \"code\": \"310\",\n    \"detail\": \"User does not exist\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Authentication Directory",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Ride Operations",
+			"item": [
+				{
+					"name": "Create Ride",
+					"item": [
+						{
+							"name": "Start ride",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Ride instance created successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');\r",
+											"var start_time = moment().unix();\r",
+											"pm.environment.set(\"timestamp\",start_time);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n\"timestamp\": \"{{timestamp}}\",\r\n \"is_mobile\": 1,\r\n\"start_lat\" :\"4.8942483\",\r\n\"start_lon\" :\"-1.7564726\",\r\n\"end_lat\" :\"4.915940654547596\",\r\n\"end_lon\" :\"-1.7750701698710114\",\r\n\"waypoint1_lat\":\"\" ,\r\n\"waypoint1_lon\" :\"\",\r\n\"waypoint2_lat\" :\"\",\r\n\"waypoint2_lon\" : \"\",\r\n\"waypoint3_lat\" : \"\",\r\n\"waypoint3_lon\" : \"\",\r\n\"start_location_name\" :\"Ama Akroma Avenue\",\r\n\"waypoint1_name\" : \"\",\r\n\"waypoint2_name\" : \"\",\r\n\"waypoint3_name\" : \"\",\r\n\"end_location_name\" : \"I. Adu Street, Effia Kwesimintsim\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/start-ride",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"start-ride"
+									]
+								},
+								"description": "Create a ride by passing timestamp value, is_mobile and other required field values to the request body.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride start time|  1648627237               |\n| is_mobile     |  To identify that request is from the standalone app.Accepts the value 1 | 1 |\n|start_lat | GPS latitude at the start point | 47.632|\n|start_lon | GPS longitude at the start point | 47.632|\n|end_lat | GPS latitude at the end point | 58.632|    \n|end_lon | GPS longitude at the end point | 1.632|\n|waypoint1_lat | GPS latitude at first waypoint  | 47.632|\n|waypoint1_lon | GPS longitude at first waypoint | 47.632|\n|waypoint2_lat | GPS latitude at second waypoint  | 47.632|\n|waypoint2_lon | GPS longitude at second waypoint | 47.632|\n|waypoint3_lat | GPS latitude at third waypoint  | 47.632|\n|waypoint3_lon | GPS longitude at third waypoint | 47.632|\n|start_location_name| Start location | Zürich| \n|waypoint1_name| first waypoint location | Winterthur| \n|waypoint2_name| second waypoint location | Lugano|\n|waypoint3_name| third waypoint location | Berlin|\n|end_location_name| endpoint location | Frauenfeld|"
+							},
+							"response": [
+								{
+									"name": "Start ride- Already exist",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "\r\n{\r\n\"timestamp\": \"1649840280\",\r\n \"is_mobile\": 1,\r\n\"start_lat\" :\"47.3786\",\r\n\"start_lon\" :\"8.5400\",\r\n\"end_lat\" :\"47.5580\",\r\n\"end_lon\" :\"8.8964\",\r\n\"waypoint1_lat\":\"47.4992\" ,\r\n\"waypoint1_lon\" :\"8.7267\",\r\n\"waypoint2_lat\" :\"46.0103\",\r\n\"waypoint2_lon\" : \"8.9625\",\r\n\"waypoint3_lat\" : \"46.2304\",\r\n\"waypoint3_lon\" : \"7.3661\",\r\n\"start_location_name\" :\"Zürich\",\r\n\"waypoint1_name\" : \"Winterthur\",\r\n\"waypoint2_name\" : \"Sion\",\r\n\"waypoint3_name\" : \"Berlin\",\r\n\"end_location_name\" : \"Frauenfeld\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/start-ride",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"start-ride"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "Start ride - success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "\r\n{\r\n\"timestamp\": \"1649840280\",\r\n \"is_mobile\": 1,\r\n\"start_lat\" :\"47.3786\",\r\n\"start_lon\" :\"8.5400\",\r\n\"end_lat\" :\"47.5580\",\r\n\"end_lon\" :\"8.8964\",\r\n\"waypoint1_lat\":\"47.4992\" ,\r\n\"waypoint1_lon\" :\"8.7267\",\r\n\"waypoint2_lat\" :\"46.0103\",\r\n\"waypoint2_lon\" : \"8.9625\",\r\n\"waypoint3_lat\" : \"46.2304\",\r\n\"waypoint3_lon\" : \"7.3661\",\r\n\"start_location_name\" :\"Zürich\",\r\n\"waypoint1_name\" : \"Winterthur\",\r\n\"waypoint2_name\" : \"Sion\",\r\n\"waypoint3_name\" : \"Berlin\",\r\n\"end_location_name\" : \"Frauenfeld\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/start-ride",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"start-ride"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"description": "Contains endpoint for ride creation / instantiation",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Filter Ride Stats",
+					"item": [
+						{
+							"name": "Filter ride stats by year( year =3 )",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a year\n* To filter ride stats by year,pass the number three(3) as value to the **filter_by** key in the request body.\neg; \"**filter_by**\" : **3**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Filter ride stats by year( year =3 )",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "Filter ride stats by year( year =3 ) - failure",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 11:28:21 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "59"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"332\",\n    \"detail\": \"No rides taken\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Filter ride stats by week (week =1 )",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a week\n* To filter ride stats by week, pass the number one(1) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **1**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Filter ride stats by week (week =1 )",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "Filter ride stats by week (week =1 ) - failure",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 11:29:32 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "59"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"332\",\n    \"detail\": \"No rides taken\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Filter ride stats by all time (all time = 4)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in terms of all time records\n* To filter ride stats by all time, pass the number four(4) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **4**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Filter ride stats by all time (all time = 4)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 4\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "Filter ride stats by all time (all time = 4) - failure",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 4\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 04 May 2022 11:30:09 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "59"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"failure\",\n    \"code\": \"332\",\n    \"detail\": \"No rides taken\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Filter ride stats by month (month = 2) - failure",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a month\n* To filter ride stats by month pass the number two(2) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **2**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Filter ride stats by month (month = 2)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n \"filter_by\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/filter-stats",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"filter-stats"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"description": "Contains endpoints for filtering ride statistics for  a particular user",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Fetch Rides",
+					"item": [
+						{
+							"name": "Fetch All_user_rides",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Retrieved user rides');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"timestamp\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch all user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**timestamp**\" \n* The order key accepts 0 or 1 which represents ascending(old) and descending(recent) orders respectively\n eg: \"**order**\": **0**  sorts all rides by old time\n eg: \"**order**\": **1**  sorts all rides that are recent\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Fetch All_user_rides",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"factor\":\"timestamp\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/all-user-rides",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"all-user-rides"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Fetch Favorited User Rides",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Response time is less than \"+limit, function() {\r",
+											"\r",
+											"\r",
+											"// pm.expect(pm.response.responseTime).to.be.below(limit);  \r",
+											"\r",
+											"// if (pm.response.responseTime < limit) {      \r",
+											"//     console.log(\"Response Time: \" + pm.response.responseTime + \" ms\" + \" / Response Date: \" + pm.response.headers.get(\"Date\"));\r",
+											"// } else {\r",
+											"//     console.log(\"Response time was longer than \" + limit + \" ms.\");\r",
+											"// }\r",
+											"// });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"is_favourite\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch All favorited user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**is_favourite**\" \n* The order key accepts 0 or 1 which represents ascending and descending orders respectively\n eg: \"**order**\": **0**  for sorting rides in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Fetch Favorited User Rides",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"factor\":\"is_favourite\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/all-user-rides",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"all-user-rides"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Fetch User Rides By Ride Speed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"average_speed\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch All rides in terms of ride speeds. Pass the factor, order and page number in the request body.\n* The factor key takes sorting type \n eg; \"**factor**\": \"**average_speed**\" for sorting rides in terms of average speed\n* The order key accepts 0 or 1 which represents ascending and descending orders respectively.\n eg: \"**order**\": **0**  for sorting rides by their speed in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Fetch User Rides By Ride Speed",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"factor\":\"average_speed\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/all-user-rides",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"all-user-rides"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Fetch  User Rides By Duration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"ride_duration\",\r\n    \"order\": 1,\r\n    \"page\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch all rides in terms ride duration. Pass the factor, order and page number in the request body.  \n* The factor key takes sorting type \n eg; \"**factor**\": \"**ride_duration**\" for sorting rides in terms of ride duration\n* The order key accepts 0 or 1 which represent ascending and descending orders respectively\n eg: \"**order**\": **0**  sorts ride duration in the ascending order.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Fetch  User Rides By Duration",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"factor\":\"ride_duration\",\r\n    \"order\": 1,\r\n    \"page\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}statistics/all-user-rides",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"all-user-rides"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Fetch Single Ride Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Retrieved ride');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/statistics/single-user-ride/{{timestamp}}",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"single-user-ride",
+										"{{timestamp}}"
+									]
+								},
+								"description": "* Fetch ride data for a specific ride by passing the timestamp of the particular ride in the URL params.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify a ride|  1648627237             |"
+							},
+							"response": [
+								{
+									"name": "Fetch Single Ride Data",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{Base_url}}statistics/single-user-ride/1649852238",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"single-user-ride",
+												"1649852238"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "Fetch Single Ride Data - ride not found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{Base_url}}statistics/single-user-ride/1649852238",
+											"host": [
+												"{{Base_url}}statistics"
+											],
+											"path": [
+												"single-user-ride",
+												"1649852238"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"description": "Contains endpoints to fetch single and all user rides",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Upload to Cloud / Backend",
+					"item": [
+						{
+							"name": "Upload Ride Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "video",
+											"type": "file",
+											"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/GoPro Lap at the QatarGP - MotoGP.mp4"
+										},
+										{
+											"key": "video_title",
+											"value": "New York Ride",
+											"type": "text"
+										},
+										{
+											"key": "timestamp",
+											"value": "{{timestamp}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-mobile-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-mobile-video"
+									]
+								},
+								"description": "* API endpoint to upload recorded ride videos. \n\n* Pass timestamp for the ride in the request params. \n* Pass video file to the **video** key, video title to **video_title** key and timestamp for the ride to the **timestamp** key in the request body as form data.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
+							},
+							"response": [
+								{
+									"name": "Upload Ride Videos",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "video",
+													"type": "file",
+													"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/NEW YORK CITY, SLAYED - Ducati Monster Street Ride V284.mp4"
+												},
+												{
+													"key": "video_title",
+													"value": "New York Ride",
+													"type": "text"
+												},
+												{
+													"key": "timestamp",
+													"value": "1648921361",
+													"type": "text"
+												}
+											],
+											"options": {
+												"raw": {
+													"language": "text"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}azure-service/upload-mobile-video",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"upload-mobile-video"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 12:53:09 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "72"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Successfully uploaded videos to Azure\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Upload CSV From Mobile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Ride calculations done');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "csv",
+											"type": "file",
+											"src": "4Q4WYfL8S/Switz.csv"
+										},
+										{
+											"key": "timestamp",
+											"value": "{{timestamp}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-csv",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-csv"
+									]
+								},
+								"description": "Endpoint to upload recorded ride data from mobile device.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n* Pass ride data file to the **csv** key  and timestamp for the ride to **timestamp** key as form data in the request body\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| csv     |    Takes sensor data file recorded from mobile | |\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
+							},
+							"response": [
+								{
+									"name": "Upload CSV From Mobile",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "csv",
+													"type": "file",
+													"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Recorded sensor data (csv)/Switz.csv"
+												},
+												{
+													"key": "timestamp",
+													"value": "1649234700",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{Base_url}}azure-service/upload-csv",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"upload-csv"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.18.0 (Ubuntu)"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 14:59:38 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "65"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Successfully uploaded CSV file\"\n}"
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Ride Creation from Recorded Video",
+					"item": [
+						{
+							"name": "Fetch Un-processed videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/0",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"0"
+									]
+								},
+								"description": "Endpoint to fetch unprocessed uploaded ride videos\n* Pass the number **0** in the request URL params to fetch unprocessed ride videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": [
+								{
+									"name": "Fetch Un-processed videos",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{Base_url}}azure-service/retrieve-inprocess-videos/0",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"retrieve-inprocess-videos",
+												"0"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 13:23:04 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "1442"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Successfully retrieved videos\",\n    \"data\": [\n        {\n            \"id\": 61,\n            \"name\": \"544db892-73eb-4a88-9dcd-86c2bea99964-1648466050-vsumm.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/544db892-73eb-4a88-9dcd-86c2bea99964-1648466050-vsumm.mp4\"\n        },\n        {\n            \"id\": 62,\n            \"name\": \"LAST_LAP_ISLE_OF_MAN__MANX_GRAND_PRIX_2019.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/LAST_LAP_ISLE_OF_MAN__MANX_GRAND_PRIX_2019.mp4\"\n        },\n        {\n            \"id\": 63,\n            \"name\": \"GoPro_Lap_at_the_QatarGP_-_MotoGP.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/GoPro_Lap_at_the_QatarGP_-_MotoGP.mp4\"\n        },\n        {\n            \"id\": 50,\n            \"name\": \"The_Pure_Sound_Of_Yamaha_R6_With_Quickshifter.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/The_Pure_Sound_Of_Yamaha_R6_With_Quickshifter.mp4\"\n        },\n        {\n            \"id\": 58,\n            \"name\": \"Genius_Girl_Stunt_Rider_Sarah_Lezito.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/Genius_Girl_Stunt_Rider_Sarah_Lezito.mp4\"\n        },\n        {\n            \"id\": 59,\n            \"name\": \"FADAMA_SALLAH_FEST_STREET_MOTOR_BATTLE_2020_CORONA_VERSION.mp4\",\n            \"url\": \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/FADAMA_SALLAH_FEST_STREET_MOTOR_BATTLE_2020_CORONA_VERSION.mp4\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch In-Process Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/1",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"1"
+									]
+								},
+								"description": "Endpoint to fetch in-process  videos.\n* Pass the number **1** in the request URL params to fetch in process videos.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": [
+								{
+									"name": "Fetch In-Process Videos",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{Base_url}}azure-service/retrieve-inprocess-videos/1",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"retrieve-inprocess-videos",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 13:24:20 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "76"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Successfully retrieved videos\",\n    \"data\": []\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch Processed Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/2",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"2"
+									]
+								},
+								"description": "Endpoint to fetch processed  videos.\n* Pass the number **2** in the request URL params to fetch processed videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Without Rides",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/3",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"3"
+									]
+								},
+								"description": "Endpoint to fetch without-rides \n* Pass the number **3** in the request URL params to fetch without-rides\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete In-Process Video",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Video deleted successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"video_id\":\"62\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/delete-old-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"delete-old-video"
+									]
+								},
+								"description": "Endpoint to delete in-process videos from Blob storage .\n* Pass the id of video to the **video_id** key in the request body in json format\n\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": [
+								{
+									"name": "Delete In-Process Video",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"video_id\":\"62\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}azure-service/delete-old-video",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"delete-old-video"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 06 Apr 2022 13:27:18 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "61"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Video deleted successfully\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Upload Old Recorded Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Videos uploaded successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "videos",
+											"type": "file",
+											"src": [
+												"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/⚡️LAST LAP✔️ ISLE OF MAN , MANX GRAND PRIX 2019.mp4",
+												"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/GoPro Lap at the QatarGP - MotoGP.mp4"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-old-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-old-video"
+									]
+								},
+								"description": "Endpoint to upload recorded GoPro videos used to create manual rides.\n* Pass videos files to the key **videos** in the request body in form data format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": [
+								{
+									"name": "Upload Old Videos",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "videos",
+													"type": "file",
+													"src": [
+														"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/⚡️LAST LAP✔️ ISLE OF MAN , MANX GRAND PRIX 2019.mp4",
+														"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/GoPro Lap at the QatarGP - MotoGP.mp4"
+													]
+												}
+											]
+										},
+										"url": {
+											"raw": "{{Base_url}}azure-service/upload-old-video/{{User_key}}",
+											"host": [
+												"{{Base_url}}azure-service"
+											],
+											"path": [
+												"upload-old-video",
+												"{{User_key}}"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.21.6"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 28 Mar 2022 09:17:12 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "404"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "POST, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=31536000; includeSubDomains"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status:\": \"success\",\n    \"detail\": \"Videos uploaded successfully\",\n    \"data\": [\n        \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/1648459029/⚡️LAST LAP✔️ ISLE OF MAN , MANX GRAND PRIX 2019.mp4\",\n        \"https://aegisriderstorage.blob.core.windows.net/old-videos/544db892-73eb-4a88-9dcd-86c2bea99964/1648459029/GoPro Lap at the QatarGP - MotoGP.mp4\"\n    ]\n}"
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Favorite rides",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride successfully favourited');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"is_favourite\": true,\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/statistics/favourite-ride",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"favourite-ride"
+							]
+						},
+						"description": "Endpoint to favorite and unfavorite a ride by passing a boolean (true or false) to the key **is_favourite** and ride timestamp to **timestamp** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": [
+						{
+							"name": "Favorite rides",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_favourite\": true,\r\n    \"timestamp\":\"1649838660\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}statistics/favourite-ride",
+									"host": [
+										"{{Base_url}}statistics"
+									],
+									"path": [
+										"favourite-ride"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Favorite rides - success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_favourite\": true,\r\n    \"timestamp\":\"1651663534\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}statistics/favourite-ride",
+									"host": [
+										"{{Base_url}}statistics"
+									],
+									"path": [
+										"favourite-ride"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 May 2022 12:13:56 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "78"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Ride successfully favourited\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Rename ride",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var TimestampArray = pm.environment.get(\"TimestampArray\");\r",
+									"\r",
+									"if(!TimestampArray){\r",
+									"    TimestampArray = ['12345'];\r",
+									"}\r",
+									"\r",
+									"var singleTimestamp = TimestampArray.shift();\r",
+									"pm.environment.set(\"CurrentTimestamp\", singleTimestamp);\r",
+									"pm.environment.set(\"TimestampArray\", TimestampArray)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride renamed successfully');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ride_title\":\"Staging Ride 001\",\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/statistics/rename-ride",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"rename-ride"
+							]
+						},
+						"description": "Endpoint to rename a particular ride. Pass the user key and timestamp in the request URL params.\n* Pass the name of ride to **ride_title** key and the ride timestamp to the **timestamp** key in the request body in json format\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": [
+						{
+							"name": "Rename ride",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ride_title\":\"Staging Ride 001\",\r\n    \"timestamp\":\"1649838660\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}statistics/rename-ride",
+									"host": [
+										"{{Base_url}}statistics"
+									],
+									"path": [
+										"rename-ride"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Delete ride",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride was deleted succesfully');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Base_url}}/statistics/delete-ride/{{timestamp}}",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"delete-ride",
+								"{{timestamp}}"
+							]
+						},
+						"description": "Endpoint to delete a user ride by passing ride timestamp to the request URL params.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": [
+						{
+							"name": "Delete ride",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{Base_url}}statistics/delete-ride/{{User_key}}/1647947707",
+									"host": [
+										"{{Base_url}}statistics"
+									],
+									"path": [
+										"delete-ride",
+										"{{User_key}}",
+										"1647947707"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Mar 2022 14:30:40 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "DELETE, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Ride was deleted succesfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete ride video",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"video_id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/azure-service/delete-ride-video",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"azure-service",
+								"delete-ride-video"
+							]
+						},
+						"description": "Endpoint to delete an uploaded ride video which is used for creating ride video summarization.\n\n* To delete an uploaded video, pass video id to the **video_id** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
+					},
+					"response": [
+						{
+							"name": "Delete ride video",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"video_id\": \"146\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}azure-service/delete-ride-video",
+									"host": [
+										"{{Base_url}}azure-service"
+									],
+									"path": [
+										"delete-ride-video"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 06 Apr 2022 17:39:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Video deleted successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Ride Video Summary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/azure-service/create-summarized-video",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"azure-service",
+								"create-summarized-video"
+							]
+						},
+						"description": "Endpoint to initiate video summarization creation for uploaded ride videos.\n* Pass the timestamp of a created ride in the request body.\n\n* Pass **Bearer Authorization Token** from the login response to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": [
+						{
+							"name": "Create Ride Video Summary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}azure-service/create-summarized-video/1647950924/{{User_key}}",
+									"host": [
+										"{{Base_url}}azure-service"
+									],
+									"path": [
+										"create-summarized-video",
+										"1647950924",
+										"{{User_key}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.18.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Mar 2022 12:36:04 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "75"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Summarization video creation initialized\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Fetch Single Ride Polyline Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Base_url}}/statistics/ride-polyline/{{timestamp}}",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"ride-polyline",
+								"{{timestamp}}"
+							]
+						},
+						"description": "Endpoint to retrieve polyline data for a  specific ride.\n\n* Pass timestamp of ride to the request URL params\n* Pass **Bearer Authorization Token** from the login response to the request header"
+					},
+					"response": [
+						{
+							"name": "Fetch Single Ride Polyline",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{Base_url}}statistics/ride-polyline/1648206718",
+									"host": [
+										"{{Base_url}}statistics"
+									],
+									"path": [
+										"ride-polyline",
+										"1648206718"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 06 Apr 2022 13:11:07 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "5293"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"detail\": \"Retrieved ride polyline\",\n    \"data\": [\n        {\n            \"lat\": 4.880995415,\n            \"lng\": -1.753098113\n        },\n        {\n            \"lat\": 4.881000887,\n            \"lng\": -1.75326939\n        },\n        {\n            \"lat\": 4.881001653,\n            \"lng\": -1.753446608\n        },\n        {\n            \"lat\": 4.880988748,\n            \"lng\": -1.75364367\n        },\n        {\n            \"lat\": 4.880983828,\n            \"lng\": -1.75377673\n        },\n        {\n            \"lat\": 4.880984104,\n            \"lng\": -1.754152606\n        },\n        {\n            \"lat\": 4.880976564,\n            \"lng\": -1.754364041\n        },\n        {\n            \"lat\": 4.880964411,\n            \"lng\": -1.75459677\n        },\n        {\n            \"lat\": 4.880954815,\n            \"lng\": -1.754824343\n        },\n        {\n            \"lat\": 4.880943046,\n            \"lng\": -1.755056273\n        },\n        {\n            \"lat\": 4.88093234,\n            \"lng\": -1.755417905\n        },\n        {\n            \"lat\": 4.88092357,\n            \"lng\": -1.755667428\n        },\n        {\n            \"lat\": 4.880913938,\n            \"lng\": -1.755908026\n        },\n        {\n            \"lat\": 4.88090735,\n            \"lng\": -1.756135626\n        },\n        {\n            \"lat\": 4.880899228,\n            \"lng\": -1.756344877\n        },\n        {\n            \"lat\": 4.880893246,\n            \"lng\": -1.756573023\n        },\n        {\n            \"lat\": 4.880888415,\n            \"lng\": -1.756655766\n        },\n        {\n            \"lat\": 4.880877058,\n            \"lng\": -1.756756462\n        },\n        {\n            \"lat\": 4.880861961,\n            \"lng\": -1.756892844\n        },\n        {\n            \"lat\": 4.880861147,\n            \"lng\": -1.757034968\n        },\n        {\n            \"lat\": 4.880853802,\n            \"lng\": -1.757218154\n        },\n        {\n            \"lat\": 4.880844501,\n            \"lng\": -1.757361708\n        },\n        {\n            \"lat\": 4.880821553,\n            \"lng\": -1.757524695\n        },\n        {\n            \"lat\": 4.880786279,\n            \"lng\": -1.757705846\n        },\n        {\n            \"lat\": 4.880733125,\n            \"lng\": -1.757918284\n        },\n        {\n            \"lat\": 4.880643005,\n            \"lng\": -1.758273595\n        },\n        {\n            \"lat\": 4.880583089,\n            \"lng\": -1.758503382\n        },\n        {\n            \"lat\": 4.880531598,\n            \"lng\": -1.758720266\n        },\n        {\n            \"lat\": 4.880488236,\n            \"lng\": -1.758888713\n        },\n        {\n            \"lat\": 4.880463014,\n            \"lng\": -1.75902963\n        },\n        {\n            \"lat\": 4.880433956,\n            \"lng\": -1.759144912\n        },\n        {\n            \"lat\": 4.880440536,\n            \"lng\": -1.759185526\n        },\n        {\n            \"lat\": 4.880458007,\n            \"lng\": -1.759197287\n        },\n        {\n            \"lat\": 4.880508115,\n            \"lng\": -1.759230486\n        },\n        {\n            \"lat\": 4.880592908,\n            \"lng\": -1.759214596\n        },\n        {\n            \"lat\": 4.880817604,\n            \"lng\": -1.759153154\n        },\n        {\n            \"lat\": 4.880958844,\n            \"lng\": -1.759127061\n        },\n        {\n            \"lat\": 4.881114381,\n            \"lng\": -1.75909009\n        },\n        {\n            \"lat\": 4.881291141,\n            \"lng\": -1.759046877\n        },\n        {\n            \"lat\": 4.881472754,\n            \"lng\": -1.759005718\n        },\n        {\n            \"lat\": 4.881746053,\n            \"lng\": -1.758957991\n        },\n        {\n            \"lat\": 4.88194689,\n            \"lng\": -1.758904569\n        },\n        {\n            \"lat\": 4.882139164,\n            \"lng\": -1.758847147\n        },\n        {\n            \"lat\": 4.882353707,\n            \"lng\": -1.758801741\n        },\n        {\n            \"lat\": 4.882589688,\n            \"lng\": -1.758733644\n        },\n        {\n            \"lat\": 4.882924512,\n            \"lng\": -1.758632731\n        },\n        {\n            \"lat\": 4.883133858,\n            \"lng\": -1.758581808\n        },\n        {\n            \"lat\": 4.883332774,\n            \"lng\": -1.758535399\n        },\n        {\n            \"lat\": 4.883517823,\n            \"lng\": -1.758496166\n        },\n        {\n            \"lat\": 4.883707182,\n            \"lng\": -1.758524331\n        },\n        {\n            \"lat\": 4.884018699,\n            \"lng\": -1.758664036\n        },\n        {\n            \"lat\": 4.884192069,\n            \"lng\": -1.758779673\n        },\n        {\n            \"lat\": 4.884366738,\n            \"lng\": -1.758865727\n        },\n        {\n            \"lat\": 4.884626945,\n            \"lng\": -1.758993896\n        },\n        {\n            \"lat\": 4.884799853,\n            \"lng\": -1.75908299\n        },\n        {\n            \"lat\": 4.884964121,\n            \"lng\": -1.759166776\n        },\n        {\n            \"lat\": 4.885150531,\n            \"lng\": -1.759253688\n        },\n        {\n            \"lat\": 4.885321793,\n            \"lng\": -1.759347986\n        },\n        {\n            \"lat\": 4.885582471,\n            \"lng\": -1.759495639\n        },\n        {\n            \"lat\": 4.885769975,\n            \"lng\": -1.759597776\n        },\n        {\n            \"lat\": 4.885933263,\n            \"lng\": -1.759675622\n        },\n        {\n            \"lat\": 4.886080243,\n            \"lng\": -1.759731687\n        },\n        {\n            \"lat\": 4.886187556,\n            \"lng\": -1.75978655\n        },\n        {\n            \"lat\": 4.886291815,\n            \"lng\": -1.759801375\n        },\n        {\n            \"lat\": 4.88631803,\n            \"lng\": -1.759802821\n        },\n        {\n            \"lat\": 4.886343127,\n            \"lng\": -1.759804738\n        },\n        {\n            \"lat\": 4.886362373,\n            \"lng\": -1.759809522\n        },\n        {\n            \"lat\": 4.886401892,\n            \"lng\": -1.759807047\n        },\n        {\n            \"lat\": 4.886539384,\n            \"lng\": -1.759785013\n        },\n        {\n            \"lat\": 4.886650447,\n            \"lng\": -1.759804735\n        },\n        {\n            \"lat\": 4.886745077,\n            \"lng\": -1.759898028\n        },\n        {\n            \"lat\": 4.886819429,\n            \"lng\": -1.760030281\n        },\n        {\n            \"lat\": 4.88690949,\n            \"lng\": -1.760125584\n        },\n        {\n            \"lat\": 4.887159966,\n            \"lng\": -1.760257757\n        },\n        {\n            \"lat\": 4.88735919,\n            \"lng\": -1.760347894\n        },\n        {\n            \"lat\": 4.887565279,\n            \"lng\": -1.760455042\n        },\n        {\n            \"lat\": 4.887800051,\n            \"lng\": -1.760574751\n        },\n        {\n            \"lat\": 4.888059708,\n            \"lng\": -1.760707205\n        },\n        {\n            \"lat\": 4.88843793,\n            \"lng\": -1.760897268\n        },\n        {\n            \"lat\": 4.888708504,\n            \"lng\": -1.761032551\n        },\n        {\n            \"lat\": 4.888985197,\n            \"lng\": -1.761177016\n        },\n        {\n            \"lat\": 4.889265357,\n            \"lng\": -1.761317052\n        },\n        {\n            \"lat\": 4.889541182,\n            \"lng\": -1.761451696\n        },\n        {\n            \"lat\": 4.889968647,\n            \"lng\": -1.761668683\n        },\n        {\n            \"lat\": 4.890248909,\n            \"lng\": -1.761813527\n        },\n        {\n            \"lat\": 4.890511897,\n            \"lng\": -1.761941022\n        },\n        {\n            \"lat\": 4.890747059,\n            \"lng\": -1.762067946\n        },\n        {\n            \"lat\": 4.890997939,\n            \"lng\": -1.76219461\n        },\n        {\n            \"lat\": 4.891372197,\n            \"lng\": -1.762382416\n        },\n        {\n            \"lat\": 4.891615714,\n            \"lng\": -1.762500682\n        },\n        {\n            \"lat\": 4.891876823,\n            \"lng\": -1.762636302\n        },\n        {\n            \"lat\": 4.892144273,\n            \"lng\": -1.762756337\n        },\n        {\n            \"lat\": 4.892419359,\n            \"lng\": -1.762898575\n        },\n        {\n            \"lat\": 4.892793041,\n            \"lng\": -1.76310045\n        },\n        {\n            \"lat\": 4.893028914,\n            \"lng\": -1.76321238\n        },\n        {\n            \"lat\": 4.893256016,\n            \"lng\": -1.763323471\n        },\n        {\n            \"lat\": 4.893485489,\n            \"lng\": -1.763443811\n        },\n        {\n            \"lat\": 4.893744092,\n            \"lng\": -1.763572241\n        },\n        {\n            \"lat\": 4.894129833,\n            \"lng\": -1.763762838\n        },\n        {\n            \"lat\": 4.894326682,\n            \"lng\": -1.763866318\n        },\n        {\n            \"lat\": 4.894510117,\n            \"lng\": -1.763970365\n        },\n        {\n            \"lat\": 4.894737136,\n            \"lng\": -1.764076455\n        },\n        {\n            \"lat\": 4.894944365,\n            \"lng\": -1.764189054\n        },\n        {\n            \"lat\": 4.895243389,\n            \"lng\": -1.764349484\n        },\n        {\n            \"lat\": 4.895436061,\n            \"lng\": -1.764443564\n        },\n        {\n            \"lat\": 4.895605083,\n            \"lng\": -1.764535014\n        },\n        {\n            \"lat\": 4.895777352,\n            \"lng\": -1.764624914\n        },\n        {\n            \"lat\": 4.895946435,\n            \"lng\": -1.764713316\n        },\n        {\n            \"lat\": 4.896181108,\n            \"lng\": -1.76483371\n        },\n        {\n            \"lat\": 4.896338897,\n            \"lng\": -1.764919372\n        },\n        {\n            \"lat\": 4.896499157,\n            \"lng\": -1.765007543\n        },\n        {\n            \"lat\": 4.896657948,\n            \"lng\": -1.765092737\n        },\n        {\n            \"lat\": 4.896832274,\n            \"lng\": -1.765178173\n        },\n        {\n            \"lat\": 4.897108112,\n            \"lng\": -1.765317825\n        },\n        {\n            \"lat\": 4.897294503,\n            \"lng\": -1.765394813\n        },\n        {\n            \"lat\": 4.897464944,\n            \"lng\": -1.765477612\n        },\n        {\n            \"lat\": 4.897631403,\n            \"lng\": -1.765568956\n        },\n        {\n            \"lat\": 4.897788186,\n            \"lng\": -1.765650898\n        },\n        {\n            \"lat\": 4.89799526,\n            \"lng\": -1.765753331\n        },\n        {\n            \"lat\": 4.898326592,\n            \"lng\": -1.765914784\n        },\n        {\n            \"lat\": 4.898405591,\n            \"lng\": -1.765950258\n        },\n        {\n            \"lat\": 4.898462949,\n            \"lng\": -1.765969822\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "Contains  request endpoints for ride operations",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User Account",
+			"item": [
+				{
+					"name": "Get User Profile Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Retrieved user info');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response data \", function () {\r",
+									"     pm.expect(jsonData.data).not.to.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/profile",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"profile"
+							]
+						},
+						"description": "Endpoint to get user profile details.\n* Pass **Bearer Authorization** access token from the login response  to the request header."
+					},
+					"response": [
+						{
+							"name": "Get User Profile Details",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{Base_url}}accounts/profile",
+									"host": [
+										"{{Base_url}}accounts"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Apr 2022 08:07:02 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "889"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Retrieved user info\",\n    \"data\": {\n        \"user_key\": \"544db892-73eb-4a88-9dcd-86c2bea99964\",\n        \"full_name\": \"Aegis Staging 001\",\n        \"profile_image\": \"https://aegismediadevstaging.blob.core.windows.net/profile-images/544db892-73eb-4a88-9dcd-86c2bea99964_1651214457.jpg\",\n        \"cover_photo\": \"https://aegismediadevstaging.blob.core.windows.net/cover-images/544db892-73eb-4a88-9dcd-86c2bea99964_1651214539.jpg\",\n        \"phone\": \"546789245\",\n        \"mobile\": \"247951281\",\n        \"other_email\": \"otheremail@nodomain.com\",\n        \"address\": \"12 Abban Avenue\",\n        \"postal_code\": \"US3015\",\n        \"city\": \"Takoradi\",\n        \"country\": \"Ghana\",\n        \"dob\": \"Mon,12 Feb 1982\",\n        \"weight\": \"50\",\n        \"weight_unit\": \"kg\",\n        \"height\": \"170.00\",\n        \"height_unit\": \"cm\",\n        \"bike\": \"Yamaha YBR 1215\",\n        \"facebook\": \"www.facebook.com/aegis\",\n        \"instagram\": \"www.instagram.com/aegis\",\n        \"twitter\": \"www.twitter.com/aegis\",\n        \"whatsapp\": \"123456789\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Profile_image Upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Pictures/adam-hauser-QEEQVSRMays-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/profile-image-upload",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"profile-image-upload"
+							]
+						},
+						"description": "* Endpoint to upload or update user profile photo.\n\n* Pass the image file in the request body as form-data to the key **profile_image**\n\n* Pass **Bearer Authorization** access token from the login response to the request header."
+					},
+					"response": [
+						{
+							"name": "Profile_image Upload",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Pictures/andrew-pons-cLHPacdtpSY-unsplash.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}accounts/profile-image-upload",
+									"host": [
+										"{{Base_url}}accounts"
+									],
+									"path": [
+										"profile-image-upload"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Apr 2022 06:40:58 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "216"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "PUT, PATCH, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Uploaded profile image\",\n    \"data\": {\n        \"image_url\": \"https://aegismediadevstaging.blob.core.windows.net/profile-images/544db892-73eb-4a88-9dcd-86c2bea99964_1651214457.jpg\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update_User_Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('User info updated');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n   \"full_name\": \"Aegis Dev 001\",\r\n    \"height\": \"170.00\",\r\n    \"height_unit\": \"cm\",\r\n    \"weight\": \"50\",\r\n    \"weight_unit\": \"kg\",\r\n    \"dob\": \"Mon,12 Feb 1982\",\r\n    \"bike\": \"Yamaha YBR 1215\",\r\n    \"phone\": \"546789245\",\r\n    \"mobile\": \"247951281\",\r\n    \"other_email\": \"otheremail@nodomain.com\",\r\n    \"address\": \"12 Abban Avenue\",\r\n    \"postal_code\": \"US3015\",\r\n    \"city\": \"Takoradi\",\r\n    \"country\": \"Ghana\",\r\n    \"facebook\": \"www.facebook.com/aegis\",\r\n    \"instagram\": \"www.instagram.com/aegis\",\r\n    \"twitter\": \"www.twitter.com/aegis\",\r\n    \"whatsapp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/update-user-profile",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"update-user-profile"
+							]
+						},
+						"description": "Endpoint to  update user account details.\n* Update user detail by updating appropriate field in the json request body.\n\n* Pass **Bearer Authorization** access token form the login response body to the request header."
+					},
+					"response": [
+						{
+							"name": "Update_User_Details",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n   \"full_name\": \"Aegis Staging 001\",\r\n    \"height\": \"170.00\",\r\n    \"height_unit\": \"cm\",\r\n    \"weight\": \"50\",\r\n    \"weight_unit\": \"kg\",\r\n    \"dob\": \"Mon,12 Feb 1982\",\r\n    \"bike\": \"Yamaha YBR 1215\",\r\n    \"phone\": \"546789245\",\r\n    \"mobile\": \"247951281\",\r\n    \"other_email\": \"otheremail@nodomain.com\",\r\n    \"address\": \"12 Abban Avenue\",\r\n    \"postal_code\": \"US3015\",\r\n    \"city\": \"Takoradi\",\r\n    \"country\": \"Ghana\",\r\n    \"facebook\": \"www.facebook.com/aegis\",\r\n    \"instagram\": \"www.instagram.com/aegis\",\r\n    \"twitter\": \"www.twitter.com/aegis\",\r\n    \"whatsapp\": \"123456789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}accounts/update-user-profile",
+									"host": [
+										"{{Base_url}}accounts"
+									],
+									"path": [
+										"update-user-profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Apr 2022 06:41:37 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "PUT, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"User info updated\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Cover_photo Upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Uploaded image');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response data \", function () {\r",
+									"     pm.expect(jsonData.data.image_url).not.to.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cover_image",
+									"type": "file",
+									"src": "n8egd6Srr/cristofer-maximilian-KfBkfDGddsY-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/cover-image-upload",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"cover-image-upload"
+							]
+						},
+						"description": "Endpoint to update user account cover photo.\n* Pass  the profile image file in the request body as form data  to the key **cover_image**\n* Pass the **Bearer Authorization** token to the request header."
+					},
+					"response": [
+						{
+							"name": "Cover_photo Upload",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cover_image",
+											"type": "file",
+											"src": "/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Pictures/conor-luddy-HKF3K2RT0KE-unsplash.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}accounts/cover-image-upload",
+									"host": [
+										"{{Base_url}}accounts"
+									],
+									"path": [
+										"cover-image-upload"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Apr 2022 06:42:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "206"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "PUT, PATCH, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"code\": \"200\",\n    \"detail\": \"Uploaded image\",\n    \"data\": {\n        \"image_url\": \"https://aegismediadevstaging.blob.core.windows.net/cover-images/544db892-73eb-4a88-9dcd-86c2bea99964_1651214539.jpg\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{Authorization}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Authorization}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

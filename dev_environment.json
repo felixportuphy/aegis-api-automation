@@ -1,0 +1,50 @@
+{
+	"id": "e6b14a7e-084d-4f88-a3d7-4e47e3847fc8",
+	"name": "Dev Environment",
+	"values": [
+		{
+			"key": "Authorization",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY3MjIzNjUyLCJqdGkiOiIwZGZjMDE1ODVlODQ0ZWY2YTQ4NDM3NmYwZmViNjdhMyIsInVzZXJfdXNlcl9rZXkiOiI1MTBkMWE5YS04YWZkLTQ3MzItOThiOS1kYzBmMDk1YmNjZTUifQ.FoD7AHa_AvdCl4b_vBrpeX6cxO7JSbW29H2x-27Ce6I",
+			"enabled": true
+		},
+		{
+			"key": "User_key",
+			"value": "510d1a9a-8afd-4732-98b9-dc0f095bcce5",
+			"enabled": true
+		},
+		{
+			"key": "Base_url",
+			"value": "https://backend-dev.aegisrider.com",
+			"enabled": true
+		},
+		{
+			"key": "Ml_url",
+			"value": "https://ml.aegisrider.com",
+			"enabled": true
+		},
+		{
+			"key": "HereService_url",
+			"value": "https://here-dev.aegisrider.com",
+			"enabled": true
+		},
+		{
+			"key": "Id_token",
+			"value": "\"eyJhbGciOiJSUzI1NiIsImtpZCI6ImNlYzEzZGViZjRiOTY0Nzk2ODM3MzYyMDUwODI0NjZjMTQ3OTdiZDAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjA2MDkxMzk1NjE5LTF1ODQwZ3FjNzhxMHJnbjN2OWU0ZHVyODEydmNwdWhlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjA2MDkxMzk1NjE5LTF1ODQwZ3FjNzhxMHJnbjN2OWU0ZHVyODEydmNwdWhlLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTEzNDU2NDE1Mzc4NTcxMzk3MTkwIiwiZW1haWwiOiJ0ZXN0YWVnaXNyaWRlcjNAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiI0NzNnY2oxNnBlZEh6TDZKeGlLMGpBIiwibmFtZSI6IkFtYWxpVGVjaCBUZXN0IiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnlQb0hURjVZSV9yZ192VWQxajV6WFBZM1NCRDRTNWlYa3FyUVJkPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFtYWxpVGVjaCIsImZhbWlseV9uYW1lIjoiVGVzdCIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjQ5MjQ1OTU0LCJleHAiOjE2NDkyNDk1NTQsImp0aSI6IjBmMjM0NzkwM2MwZTNjYjdhN2YzNTUyYjI2NDk0NzQ4ZDBlZTNhNTYifQ.lkEgnzPd44qbByO45UllLgI2B7wj37a7EhOhzCfEFEbjF2UrbEhid4vj8PErG-0JK2Dej4vshKmQ_arXphh90XjhoJbctFCvb2r7g-DlQ0UH-Um8fnjwh4K9Ise-9NnnVXR7g1gUx304u26jwiAT3X3OP3dPGQusQlKDDsVdDTG-nsnxx1fDmKSpF6Bu4QFNix1GvzC_uBhc4yUn5-yPBHwguF6BgdaN7waH87ga2y4TWfdvZ-34S81pfgH6qFfHYtp3aWjOh3gnfQFX2oB7mUau-GRNYjneEu_Fvz_SKKIh9Lf00Zpdio5uZ4D_kYaAjbaobPbCNnfj7E7HQg64tQ\"",
+			"enabled": true
+		},
+		{
+			"key": "timestamp",
+			"value": 1651669611,
+			"enabled": true
+		},
+		{
+			"key": "HereBase_url",
+			"value": "https://aegis-here-polyline.azurewebsites.net",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2022-05-09T12:32:53.330Z",
+	"_postman_exported_using": "Postman/9.18.1-220502-0900"
+}
