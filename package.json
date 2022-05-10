@@ -1,0 +1,17 @@
+{
+  "name": "aegis-api-automation",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "newman run aegis_collection_ci.json -e dev_environment.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [
+    "Postman",
+    "CI"
+  ],
+  "dependencies": {
+    "newman": "^5.3.2"
+  }
+}
