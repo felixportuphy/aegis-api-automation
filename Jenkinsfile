@@ -3,7 +3,6 @@ pipeline{
     stages{
         stage('Run Collection'){
             steps{
-            sh 'npm install -g newman'
              sh 'newman run aegis_collection_ci.json -e dev_environment.json'
         }
     }

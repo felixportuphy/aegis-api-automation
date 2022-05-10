@@ -1,2316 +1,2608 @@
 {
-  "info": {
-    "_postman_id": "cf8fbe12-88fc-4930-89a1-18533ee9f72a",
-    "name": "Aegis Collection (CI test)",
-    "description": "Aegis Rider API Documentation",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Auth",
-      "item": [
-        {
-          "name": "Login",
-          "item": [
-            {
-              "name": "Login(verified user)",
-              "event": [
-                {
-                  "listen": "prerequest",
-                  "script": {
-                    "exec": [""],
-                    "type": "text/javascript"
-                  }
-                },
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = JSON.parse(responseBody);\r",
-                      "postman.setEnvironmentVariable(\"Authorization\", jsonData.data.access);\r",
-                      "postman.setEnvironmentVariable(\"User_key\", jsonData.data.user.user_key);\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n   \"email\": \"testamalitech@gmail.com\",\r\n   \"password\": \"testpassword#1\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/sign-in",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "sign-in"]
-                },
-                "description": "Login with valid user credentials for an existing user by passing email address and correct password in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Login(unverified user)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 320\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('320');\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/sign-in",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "sign-in"]
-                },
-                "description": "Login with valid user credentials for an existing but unverified user account by passing email address and correct password in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Login(non-existing user)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = pm.response.json()\r",
-                      "\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 310\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('310');\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "    pm.expect(jsonData.detail).to.eq('User does not exist');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/sign-in",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "sign-in"]
-                },
-                "description": "Login with a non-existing user by passing email address and user password in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Login(wrong password)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "  var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 401\", function () {\r",
-                      "    pm.response.to.have.status(401);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message\", function () {\r",
-                      "    pm.expect(jsonData.detail).to.eq('No active account found with the given credentials');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"wrongpassword\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/sign-in",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "sign-in"]
-                },
-                "description": "Login with valid user credentials for an existing user by passing email address and a wrong user password in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Apple Sign in (Mobile App)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"apple_id\": \"002007.162d99d1c043456fad66cb9442d65556.1136\",\r\n  \"email\": \"\",\r\n  \"first_name\":\"\",\r\n  \"last_name\":\"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/apple-login",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "apple-login"]
-                },
-                "description": "Continue with Apple sign in by passing a valid Apple ID to apple_ID key in the request body. email,first_name ,last_name fields  optional"
-              },
-              "response": []
-            },
-            {
-              "name": "Google Sign in",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"token\": \"{{Id_token}}\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/google-login",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "google-login"]
-                },
-                "description": "Continue with google sign in by passing the id_token signature from google authentication response to **token** key in the request body."
-              },
-              "response": []
-            },
-            {
-              "name": "Apple Sign up (Web App)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"code\":\"cfb9133c2e8654905aaafc664fb06ae8d.0.muvz.Gklff50zmCWv78S6NyUvTw\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/apple-signup",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "apple-signup"]
-                },
-                "description": "Endpoint to sign up with Apple on the web application. \n* Pass signed Apple code  to the **code** key in the request body"
-              },
-              "response": []
-            }
-          ],
-          "description": "Contains login request endpoints",
-          "auth": {
-            "type": "noauth"
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Registration",
-          "item": [
-            {
-              "name": "Registration(new email)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = pm.response.json()\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 201\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('201');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n \"email\": \"testamalitech{{$timestamp}}@gmail.com\",\r\n \"password\": \"password\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/registration",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "registration"]
-                },
-                "description": "Create a new user account by passing email address and password to the appropriate keys in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Registration(unverified email)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = pm.response.json()\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 320\", function () {\r",
-                      "    pm.expect(jsonData.status).to.eq('failure');\r",
-                      "    pm.expect(jsonData.code).to.eq('320');\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/registration",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "registration"]
-                },
-                "description": "Create an account with an existing but unverified email address /account by passing an existing but unverified email and password to the appropriate keys in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Registration(already existing user)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = pm.response.json()\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 311\", function () {\r",
-                      "    pm.expect(jsonData.status).to.eq('failure');\r",
-                      "    pm.expect(jsonData.code).to.eq('311');\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "    pm.expect(jsonData.detail).to.eq('User already exist with same email');\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"testpassword#1\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/registration",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "registration"]
-                },
-                "description": "Create a new account by passing an existing email address and valid password to the appropriate field/keys in the request body"
-              },
-              "response": []
-            },
-            {
-              "name": "Resend verification email",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/resend-email",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "resend-email"]
-                },
-                "description": "Resend account verification email by by passing email address to  email key in the request body"
-              },
-              "response": []
-            }
-          ],
-          "auth": {
-            "type": "noauth"
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Password Reset",
-          "item": [
-            {
-              "name": "Forgot Password",
-              "item": [
-                {
-                  "name": "Send_Password_Reset_Mail",
-                  "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "exec": [
-                          " var jsonData = pm.response.json();\r",
-                          "\r",
-                          "pm.test(\"Validate response code is 200\", function () {\r",
-                          "    pm.expect(jsonData.code).to.eq('200');\r",
-                          "   \r",
-                          "});\r",
-                          "\r",
-                          "pm.test(\"Validate response message \", function () {\r",
-                          "     pm.expect(jsonData.detail).to.eq('Password reset code sent successfully');\r",
-                          "});"
-                        ],
-                        "type": "text/javascript"
-                      }
-                    }
-                  ],
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "POST",
-                    "header": [],
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\r\n    \"email\": \"testamalitech@gmail.com\"\r\n}",
-                      "options": {
-                        "raw": {
-                          "language": "json"
-                        }
-                      }
-                    },
-                    "url": {
-                      "raw": "{{Base_url}}/auth/send-password-reset-mail",
-                      "host": ["{{Base_url}}"],
-                      "path": ["auth", "send-password-reset-mail"]
-                    },
-                    "description": "Pass email address to email key in request body to send reset password code"
-                  },
-                  "response": []
-                },
-                {
-                  "name": "Reset_Password",
-                  "event": [
-                    {
-                      "listen": "test",
-                      "script": {
-                        "exec": [
-                          " var jsonData = pm.response.json();\r",
-                          "\r",
-                          "pm.test(\"Validate response code is 200\", function () {\r",
-                          "    pm.expect(jsonData.code).to.eq('200');\r",
-                          "   \r",
-                          "});\r",
-                          "\r",
-                          "pm.test(\"Validate response message \", function () {\r",
-                          "     pm.expect(jsonData.detail).to.eq('Password reset successful');\r",
-                          "});"
-                        ],
-                        "type": "text/javascript"
-                      }
-                    }
-                  ],
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "POST",
-                    "header": [],
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\r\n    \"user_key\":{{User_key}},\r\n    \"password\":\"testpassword#1\"\r\n}",
-                      "options": {
-                        "raw": {
-                          "language": "json"
-                        }
-                      }
-                    },
-                    "url": {
-                      "raw": "{{Base_url}}/auth/reset-password",
-                      "host": ["{{Base_url}}"],
-                      "path": ["auth", "reset-password"]
-                    },
-                    "description": "Reset password by passing the user_key in the login user response object and new password in the request body"
-                  },
-                  "response": []
-                }
-              ],
-              "description": "Contains endpoints for resetting password using six digit code",
-              "event": [
-                {
-                  "listen": "prerequest",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [""]
-                  }
-                },
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [""]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Change Password",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Password changed successfully');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{Authorization}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \r\n    \"password\": \"testpassword#1\",\r\n    \"new_password\": \"testpassword#1\"\r\n    \r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/auth/change-password",
-                  "host": ["{{Base_url}}"],
-                  "path": ["auth", "change-password"]
-                },
-                "description": "* Change user account password by passing old password and new password to the request body.\n* Pass **Bearer Authorization** access token from login response body to the request header"
-              },
-              "response": []
-            }
-          ],
-          "description": "Contains endpoints for Reset Password(Forgot password) and Change account password",
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Check User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "\r",
-                  "var jsonData = pm.response.json();\r",
-                  "\r",
-                  "pm.test(\"Validate response code is 200\", function () {\r",
-                  "    pm.expect(jsonData.code).to.eq('200');\r",
-                  "   \r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('User exists');\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n   \"email\": \"testamalitech@gmail.com\"\r\n    \r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/auth/check-user",
-              "host": ["{{Base_url}}"],
-              "path": ["auth", "check-user"]
-            },
-            "description": "Check up user  by passing email address in the request body."
-          },
-          "response": []
-        },
-        {
-          "name": "Resend Account Activation Mail",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  " var jsonData = pm.response.json();\r",
-                  "\r",
-                  "pm.test(\"Validate response code is 200\", function () {\r",
-                  "    pm.expect(jsonData.code).to.eq('200');\r",
-                  "   \r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/auth/resend-email",
-              "host": ["{{Base_url}}"],
-              "path": ["auth", "resend-email"]
-            },
-            "description": "API endpoint to resend account verification  mail to users email inbox to confirm or verify an account"
-          },
-          "response": []
-        }
-      ],
-      "description": "Authentication Directory",
-      "auth": {
-        "type": "noauth"
-      },
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Ride Operations",
-      "item": [
-        {
-          "name": "Create Ride",
-          "item": [
-            {
-              "name": "Start ride",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      "var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Ride instance created successfully');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                },
-                {
-                  "listen": "prerequest",
-                  "script": {
-                    "exec": [
-                      "var moment = require('moment');\r",
-                      "var start_time = moment().unix();\r",
-                      "pm.environment.set(\"timestamp\",start_time);"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "\r\n{\r\n\"timestamp\": {{timestamp}},\r\n \"is_mobile\": 1,\r\n\"start_lat\" :\"4.8942483\",\r\n\"start_lon\" :\"-1.7564726\",\r\n\"end_lat\" :\"4.915940654547596\",\r\n\"end_lon\" :\"-1.7750701698710114\",\r\n\"waypoint1_lat\":\"\" ,\r\n\"waypoint1_lon\" :\"\",\r\n\"waypoint2_lat\" :\"\",\r\n\"waypoint2_lon\" : \"\",\r\n\"waypoint3_lat\" : \"\",\r\n\"waypoint3_lon\" : \"\",\r\n\"start_location_name\" :\"Ama Akroma Avenue\",\r\n\"waypoint1_name\" : \"\",\r\n\"waypoint2_name\" : \"\",\r\n\"waypoint3_name\" : \"\",\r\n\"end_location_name\" : \"I. Adu Street, Effia Kwesimintsim\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/start-ride",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "start-ride"]
-                },
-                "description": "Create a ride by passing timestamp value, is_mobile and other required field values to the request body.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride start time|  1648627237               |\n| is_mobile     |  To identify that request is from the standalone app.Accepts the value 1 | 1 |\n|start_lat | GPS latitude at the start point | 47.632|\n|start_lon | GPS longitude at the start point | 47.632|\n|end_lat | GPS latitude at the end point | 58.632|    \n|end_lon | GPS longitude at the end point | 1.632|\n|waypoint1_lat | GPS latitude at first waypoint  | 47.632|\n|waypoint1_lon | GPS longitude at first waypoint | 47.632|\n|waypoint2_lat | GPS latitude at second waypoint  | 47.632|\n|waypoint2_lon | GPS longitude at second waypoint | 47.632|\n|waypoint3_lat | GPS latitude at third waypoint  | 47.632|\n|waypoint3_lon | GPS longitude at third waypoint | 47.632|\n|start_location_name| Start location | Zürich| \n|waypoint1_name| first waypoint location | Winterthur| \n|waypoint2_name| second waypoint location | Lugano|\n|waypoint3_name| third waypoint location | Berlin|\n|end_location_name| endpoint location | Frauenfeld|"
-              },
-              "response": []
-            }
-          ],
-          "description": "Contains endpoint for ride creation / instantiation",
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Filter Ride Stats",
-          "item": [
-            {
-              "name": "Filter ride stats by year( year =3 )",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "\r",
-                      "\r",
-                      "\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n \"filter_by\": 3\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/filter-stats",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "filter-stats"]
-                },
-                "description": "Filter users ride statistics in a year\n* To filter ride stats by year,pass the number three(3) as value to the **filter_by** key in the request body.\neg; \"**filter_by**\" : **3**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Filter ride stats by week (week =1 )",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n \"filter_by\": 1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/filter-stats",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "filter-stats"]
-                },
-                "description": "Filter users ride statistics in a week\n* To filter ride stats by week, pass the number one(1) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **1**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Filter ride stats by all time (all time = 4)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n \"filter_by\": 4\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/filter-stats",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "filter-stats"]
-                },
-                "description": "Filter users ride statistics in terms of all time records\n* To filter ride stats by all time, pass the number four(4) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **4**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Filter ride stats by month (month = 2) - failure",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n \"filter_by\": 2\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/filter-stats",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "filter-stats"]
-                },
-                "description": "Filter users ride statistics in a month\n* To filter ride stats by month pass the number two(2) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **2**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            }
-          ],
-          "description": "Contains endpoints for filtering ride statistics for  a particular user",
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Fetch Rides",
-          "item": [
-            {
-              "name": "Fetch All_user_rides",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Retrieved user rides');\r",
-                      "});\r",
-                      "\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \r\n    \"factor\":\"timestamp\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/all-user-rides",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "all-user-rides"]
-                },
-                "description": "Fetch all user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**timestamp**\" \n* The order key accepts 0 or 1 which represents ascending(old) and descending(recent) orders respectively\n eg: \"**order**\": **0**  sorts all rides by old time\n eg: \"**order**\": **1**  sorts all rides that are recent\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch Favorited User Rides",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "// pm.test(\"Response time is less than \"+limit, function() {\r",
-                      "\r",
-                      "\r",
-                      "// pm.expect(pm.response.responseTime).to.be.below(limit);  \r",
-                      "\r",
-                      "// if (pm.response.responseTime < limit) {      \r",
-                      "//     console.log(\"Response Time: \" + pm.response.responseTime + \" ms\" + \" / Response Date: \" + pm.response.headers.get(\"Date\"));\r",
-                      "// } else {\r",
-                      "//     console.log(\"Response time was longer than \" + limit + \" ms.\");\r",
-                      "// }\r",
-                      "// });"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \r\n    \"factor\":\"is_favourite\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/all-user-rides",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "all-user-rides"]
-                },
-                "description": "Fetch All favorited user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**is_favourite**\" \n* The order key accepts 0 or 1 which represents ascending and descending orders respectively\n eg: \"**order**\": **0**  for sorting rides in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch User Rides By Ride Speed",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \r\n    \"factor\":\"average_speed\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/all-user-rides",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "all-user-rides"]
-                },
-                "description": "Fetch All rides in terms of ride speeds. Pass the factor, order and page number in the request body.\n* The factor key takes sorting type \n eg; \"**factor**\": \"**average_speed**\" for sorting rides in terms of average speed\n* The order key accepts 0 or 1 which represents ascending and descending orders respectively.\n eg: \"**order**\": **0**  for sorting rides by their speed in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch  User Rides By Duration",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \r\n    \"factor\":\"ride_duration\",\r\n    \"order\": 1,\r\n    \"page\": 1\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/statistics/all-user-rides",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "all-user-rides"]
-                },
-                "description": "Fetch all rides in terms ride duration. Pass the factor, order and page number in the request body.  \n* The factor key takes sorting type \n eg; \"**factor**\": \"**ride_duration**\" for sorting rides in terms of ride duration\n* The order key accepts 0 or 1 which represent ascending and descending orders respectively\n eg: \"**order**\": **0**  sorts ride duration in the ascending order.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch Single Ride Data",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "\r",
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Retrieved ride');\r",
-                      "});\r",
-                      "\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                },
-                {
-                  "listen": "prerequest",
-                  "script": {
-                    "exec": [""],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{Base_url}}/statistics/single-user-ride/{{timestamp}}",
-                  "host": ["{{Base_url}}"],
-                  "path": ["statistics", "single-user-ride", "{{timestamp}}"]
-                },
-                "description": "* Fetch ride data for a specific ride by passing the timestamp of the particular ride in the URL params.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify a ride|  1648627237             |"
-              },
-              "response": []
-            }
-          ],
-          "description": "Contains endpoints to fetch single and all user rides",
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Upload to Cloud / Backend",
-          "item": [
-            {
-              "name": "Upload Ride Videos",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "})"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "video",
-                      "type": "file",
-                      "src": "./video.mp4"
-                    },
-                    {
-                      "key": "video_title",
-                      "value": "New York Ride",
-                      "type": "text"
-                    },
-                    {
-                      "key": "timestamp",
-                      "value": "{{timestamp}}",
-                      "type": "text"
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/upload-mobile-video",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "upload-mobile-video"]
-                },
-                "description": "* API endpoint to upload recorded ride videos. \n\n* Pass timestamp for the ride in the request params. \n* Pass video file to the **video** key, video title to **video_title** key and timestamp for the ride to the **timestamp** key in the request body as form data.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
-              },
-              "response": []
-            },
-            {
-              "name": "Upload CSV From Mobile",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Validate response code is 200\", function () {\r",
-                      "    pm.expect(jsonData.code).to.eq('200');\r",
-                      "   \r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Ride calculations done');\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "csv",
-                      "type": "file",
-                      "src": "./ride_data.csv"
-                    },
-                    {
-                      "key": "timestamp",
-                      "value": "{{timestamp}}",
-                      "type": "text"
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/upload-csv",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "upload-csv"]
-                },
-                "description": "Endpoint to upload recorded ride data from mobile device.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n* Pass ride data file to the **csv** key  and timestamp for the ride to **timestamp** key as form data in the request body\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| csv     |    Takes sensor data file recorded from mobile | |\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
-              },
-              "response": []
-            }
-          ],
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Ride Creation from Recorded Video",
-          "item": [
-            {
-              "name": "Fetch Un-processed videos",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/0",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "retrieve-inprocess-videos", "0"]
-                },
-                "description": "Endpoint to fetch unprocessed uploaded ride videos\n* Pass the number **0** in the request URL params to fetch unprocessed ride videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch In-Process Videos",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/1",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "retrieve-inprocess-videos", "1"]
-                },
-                "description": "Endpoint to fetch in-process  videos.\n* Pass the number **1** in the request URL params to fetch in process videos.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch Processed Videos",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/2",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "retrieve-inprocess-videos", "2"]
-                },
-                "description": "Endpoint to fetch processed  videos.\n* Pass the number **2** in the request URL params to fetch processed videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
-              },
-              "response": []
-            },
-            {
-              "name": "Fetch Without Rides",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/3",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "retrieve-inprocess-videos", "3"]
-                },
-                "description": "Endpoint to fetch without-rides \n* Pass the number **3** in the request URL params to fetch without-rides\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
-              },
-              "response": []
-            },
-            {
-              "name": "Delete In-Process Video",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Video deleted successfully');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"video_id\":\"62\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/delete-old-video",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "delete-old-video"]
-                },
-                "description": "Endpoint to delete in-process videos from Blob storage .\n* Pass the id of video to the **video_id** key in the request body in json format\n\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
-              },
-              "response": []
-            },
-            {
-              "name": "Upload Old Recorded Videos",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      " var jsonData = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"Status code is 200\", function () {\r",
-                      "    pm.response.to.have.status(200);\r",
-                      "});\r",
-                      "\r",
-                      "pm.test(\"Validate response message \", function () {\r",
-                      "     pm.expect(jsonData.detail).to.eq('Videos uploaded successfully');\r",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "videos",
-                      "type": "file",
-                      "src": ["./video.mp4", "./video.mp4"]
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{Base_url}}/azure-service/upload-old-video",
-                  "host": ["{{Base_url}}"],
-                  "path": ["azure-service", "upload-old-video"]
-                },
-                "description": "Endpoint to upload recorded GoPro videos used to create manual rides.\n* Pass videos files to the key **videos** in the request body in form data format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
-              },
-              "response": []
-            }
-          ],
-          "auth": {
-            "type": "bearer",
-            "bearer": [
-              {
-                "key": "token",
-                "value": "{{Authorization}}",
-                "type": "string"
-              }
-            ]
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [""]
-              }
-            }
-          ]
-        },
-        {
-          "name": "Favorite rides",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [""],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  " var jsonData = pm.response.json()\r",
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Ride successfully favourited');\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"is_favourite\": true,\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/statistics/favourite-ride",
-              "host": ["{{Base_url}}"],
-              "path": ["statistics", "favourite-ride"]
-            },
-            "description": "Endpoint to favorite and unfavorite a ride by passing a boolean (true or false) to the key **is_favourite** and ride timestamp to **timestamp** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
-          },
-          "response": []
-        },
-        {
-          "name": "Rename ride",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "var TimestampArray = pm.environment.get(\"TimestampArray\");\r",
-                  "\r",
-                  "if(!TimestampArray){\r",
-                  "    TimestampArray = ['12345'];\r",
-                  "}\r",
-                  "\r",
-                  "var singleTimestamp = TimestampArray.shift();\r",
-                  "pm.environment.set(\"CurrentTimestamp\", singleTimestamp);\r",
-                  "pm.environment.set(\"TimestampArray\", TimestampArray)"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  " var jsonData = pm.response.json()\r",
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Ride renamed successfully');\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"ride_title\":\"Staging Ride 001\",\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/statistics/rename-ride",
-              "host": ["{{Base_url}}"],
-              "path": ["statistics", "rename-ride"]
-            },
-            "description": "Endpoint to rename a particular ride. Pass the user key and timestamp in the request URL params.\n* Pass the name of ride to **ride_title** key and the ride timestamp to the **timestamp** key in the request body in json format\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete ride",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [""],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  " var jsonData = pm.response.json()\r",
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  "\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Ride was deleted succesfully');\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{Base_url}}/statistics/delete-ride/{{timestamp}}",
-              "host": ["{{Base_url}}"],
-              "path": ["statistics", "delete-ride", "{{timestamp}}"]
-            },
-            "description": "Endpoint to delete a user ride by passing ride timestamp to the request URL params.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete ride video",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"video_id\": \"1\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/azure-service/delete-ride-video",
-              "host": ["{{Base_url}}"],
-              "path": ["azure-service", "delete-ride-video"]
-            },
-            "description": "Endpoint to delete an uploaded ride video which is used for creating ride video summarization.\n\n* To delete an uploaded video, pass video id to the **video_id** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
-          },
-          "response": []
-        },
-        {
-          "name": "Create Ride Video Summary",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [""],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"timestamp\":\"{{timestamp}}\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/azure-service/create-summarized-video",
-              "host": ["{{Base_url}}"],
-              "path": ["azure-service", "create-summarized-video"]
-            },
-            "description": "Endpoint to initiate video summarization creation for uploaded ride videos.\n* Pass the timestamp of a created ride in the request body.\n\n* Pass **Bearer Authorization Token** from the login response to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
-          },
-          "response": []
-        },
-        {
-          "name": "Fetch Single Ride Polyline Data",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{Authorization}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{Base_url}}/statistics/ride-polyline/{{timestamp}}",
-              "host": ["{{Base_url}}"],
-              "path": ["statistics", "ride-polyline", "{{timestamp}}"]
-            },
-            "description": "Endpoint to retrieve polyline data for a  specific ride.\n\n* Pass timestamp of ride to the request URL params\n* Pass **Bearer Authorization Token** from the login response to the request header"
-          },
-          "response": []
-        }
-      ],
-      "description": "Contains  request endpoints for ride operations",
-      "auth": {
-        "type": "noauth"
-      },
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        }
-      ]
-    },
-    {
-      "name": "User Account",
-      "item": [
-        {
-          "name": "Get User Profile Details",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "\r",
-                  " var jsonData = pm.response.json();\r",
-                  "\r",
-                  "pm.test(\"Validate response code is 200\", function () {\r",
-                  "    pm.expect(jsonData.code).to.eq('200');\r",
-                  "   \r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Retrieved user info');\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response data \", function () {\r",
-                  "     pm.expect(jsonData.data).not.to.be.empty;\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{Base_url}}/accounts/profile",
-              "host": ["{{Base_url}}"],
-              "path": ["accounts", "profile"]
-            },
-            "description": "Endpoint to get user profile details.\n* Pass **Bearer Authorization** access token from the login response  to the request header."
-          },
-          "response": []
-        },
-        {
-          "name": "Profile_image Upload",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {\r",
-                  "    pm.response.to.have.status(200);\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "profile_image",
-                  "type": "file",
-                  "src": "./profile_pic.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{Base_url}}/accounts/profile-image-upload",
-              "host": ["{{Base_url}}"],
-              "path": ["accounts", "profile-image-upload"]
-            },
-            "description": "* Endpoint to upload or update user profile photo.\n\n* Pass the image file in the request body as form-data to the key **profile_image**\n\n* Pass **Bearer Authorization** access token from the login response to the request header."
-          },
-          "response": []
-        },
-        {
-          "name": "Update_User_Details",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "\r",
-                  " var jsonData = pm.response.json();\r",
-                  "\r",
-                  "pm.test(\"Validate response code is 200\", function () {\r",
-                  "    pm.expect(jsonData.code).to.eq('200');\r",
-                  "   \r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('User info updated');\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{   \r\n   \"full_name\": \"Aegis Dev 001\",\r\n    \"height\": \"170.00\",\r\n    \"height_unit\": \"cm\",\r\n    \"weight\": \"50\",\r\n    \"weight_unit\": \"kg\",\r\n    \"dob\": \"Mon,12 Feb 1982\",\r\n    \"bike\": \"Yamaha YBR 1215\",\r\n    \"phone\": \"546789245\",\r\n    \"mobile\": \"247951281\",\r\n    \"other_email\": \"otheremail@nodomain.com\",\r\n    \"address\": \"12 Abban Avenue\",\r\n    \"postal_code\": \"US3015\",\r\n    \"city\": \"Takoradi\",\r\n    \"country\": \"Ghana\",\r\n    \"facebook\": \"www.facebook.com/aegis\",\r\n    \"instagram\": \"www.instagram.com/aegis\",\r\n    \"twitter\": \"www.twitter.com/aegis\",\r\n    \"whatsapp\": \"\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{Base_url}}/accounts/update-user-profile",
-              "host": ["{{Base_url}}"],
-              "path": ["accounts", "update-user-profile"]
-            },
-            "description": "Endpoint to  update user account details.\n* Update user detail by updating appropriate field in the json request body.\n\n* Pass **Bearer Authorization** access token form the login response body to the request header."
-          },
-          "response": []
-        },
-        {
-          "name": "Cover_photo Upload",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();\r",
-                  "\r",
-                  "pm.test(\"Validate response code is 200\", function () {\r",
-                  "    pm.expect(jsonData.code).to.eq('200');\r",
-                  "   \r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response message \", function () {\r",
-                  "     pm.expect(jsonData.detail).to.eq('Uploaded image');\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Validate response data \", function () {\r",
-                  "     pm.expect(jsonData.data.image_url).not.to.be.empty;\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "cover_image",
-                  "type": "file",
-                  "src": "./cover_pic.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{Base_url}}/accounts/cover-image-upload",
-              "host": ["{{Base_url}}"],
-              "path": ["accounts", "cover-image-upload"]
-            },
-            "description": "Endpoint to update user account cover photo.\n* Pass  the profile image file in the request body as form data  to the key **cover_image**\n* Pass the **Bearer Authorization** token to the request header."
-          },
-          "response": []
-        }
-      ],
-      "auth": {
-        "type": "bearer",
-        "bearer": [
-          {
-            "key": "token",
-            "value": "{{Authorization}}",
-            "type": "string"
-          }
-        ]
-      },
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [""]
-          }
-        }
-      ]
-    }
-  ],
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{Authorization}}",
-        "type": "string"
-      }
-    ]
-  },
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ]
+	"info": {
+		"_postman_id": "cf8fbe12-88fc-4930-89a1-18533ee9f72a",
+		"name": "Aegis Collection (CI test)",
+		"description": "Aegis Rider API Documentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login(verified user)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"Authorization\", jsonData.data.access);\r",
+											"postman.setEnvironmentVariable(\"User_key\", jsonData.data.user.user_key);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\",\r\n   \"password\": \"testpassword#1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing user by passing email address and correct password in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Login(unverified user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 320\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('320');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing but unverified user account by passing email address and correct password in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Login(non-existing user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 310\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('310');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('User does not exist');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"nonexistinguser@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with a non-existing user by passing email address and user password in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Login(wrong password)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"  var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message\", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('No active account found with the given credentials');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/sign-in",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"sign-in"
+									]
+								},
+								"description": "Login with valid user credentials for an existing user by passing email address and a wrong user password in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Apple Sign in (Mobile App)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"apple_id\": \"002007.162d99d1c043456fad66cb9442d65556.1136\",\r\n  \"email\": \"\",\r\n  \"first_name\":\"\",\r\n  \"last_name\":\"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/apple-login",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"apple-login"
+									]
+								},
+								"description": "Continue with Apple sign in by passing a valid Apple ID to apple_ID key in the request body. email,first_name ,last_name fields  optional"
+							},
+							"response": []
+						},
+						{
+							"name": "Google Sign in",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"{{Id_token}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/google-login",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"google-login"
+									]
+								},
+								"description": "Continue with google sign in by passing the id_token signature from google authentication response to **token** key in the request body."
+							},
+							"response": []
+						},
+						{
+							"name": "Apple Sign up (Web App)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\":\"cfb9133c2e8654905aaafc664fb06ae8d.0.muvz.Gklff50zmCWv78S6NyUvTw\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/apple-signup",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"apple-signup"
+									]
+								},
+								"description": "Endpoint to sign up with Apple on the web application. \n* Pass signed Apple code  to the **code** key in the request body"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains login request endpoints",
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Registration",
+					"item": [
+						{
+							"name": "Registration(new email)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 201\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('201');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"email\": \"testamalitech{{$timestamp}}@gmail.com\",\r\n \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create a new user account by passing email address and password to the appropriate keys in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Registration(unverified email)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 320\", function () {\r",
+											"    pm.expect(jsonData.status).to.eq('failure');\r",
+											"    pm.expect(jsonData.code).to.eq('320');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('Your account exists but is not verified. Please verify from your email inbox');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\",\r\n    \"password\": \"testpassword#4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create an account with an existing but unverified email address /account by passing an existing but unverified email and password to the appropriate keys in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Registration(already existing user)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json()\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response code is 311\", function () {\r",
+											"    pm.expect(jsonData.status).to.eq('failure');\r",
+											"    pm.expect(jsonData.code).to.eq('311');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"    pm.expect(jsonData.detail).to.eq('User already exist with same email');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\",\r\n    \"password\": \"testpassword#1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/registration",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								},
+								"description": "Create a new account by passing an existing email address and valid password to the appropriate field/keys in the request body"
+							},
+							"response": []
+						},
+						{
+							"name": "Resend verification email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/resend-email",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"resend-email"
+									]
+								},
+								"description": "Resend account verification email by by passing email address to  email key in the request body"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Password Reset",
+					"item": [
+						{
+							"name": "Forgot Password",
+							"item": [
+								{
+									"name": "Send_Password_Reset_Mail",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													" var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Validate response code is 200\", function () {\r",
+													"    pm.expect(jsonData.code).to.eq('200');\r",
+													"   \r",
+													"});\r",
+													"\r",
+													"pm.test(\"Validate response message \", function () {\r",
+													"     pm.expect(jsonData.detail).to.eq('Password reset code sent successfully');\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"testamalitech@gmail.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}/auth/send-password-reset-mail",
+											"host": [
+												"{{Base_url}}"
+											],
+											"path": [
+												"auth",
+												"send-password-reset-mail"
+											]
+										},
+										"description": "Pass email address to email key in request body to send reset password code"
+									},
+									"response": []
+								},
+								{
+									"name": "Reset_Password",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													" var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Validate response code is 200\", function () {\r",
+													"    pm.expect(jsonData.code).to.eq('200');\r",
+													"   \r",
+													"});\r",
+													"\r",
+													"pm.test(\"Validate response message \", function () {\r",
+													"     pm.expect(jsonData.detail).to.eq('Password reset successful');\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_key\":\"{{User_key}}\",\r\n    \"password\":\"testpassword#1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{Base_url}}/auth/reset-password",
+											"host": [
+												"{{Base_url}}"
+											],
+											"path": [
+												"auth",
+												"reset-password"
+											]
+										},
+										"description": "Reset password by passing the user_key in the login user response object and new password in the request body"
+									},
+									"response": []
+								}
+							],
+							"description": "Contains endpoints for resetting password using six digit code",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Change Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Password changed successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"password\": \"testpassword#1\",\r\n    \"new_password\": \"testpassword#1\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/auth/change-password",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"auth",
+										"change-password"
+									]
+								},
+								"description": "* Change user account password by passing old password and new password to the request body.\n* Pass **Bearer Authorization** access token from login response body to the request header"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains endpoints for Reset Password(Forgot password) and Change account password",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Check User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('User exists');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"testamalitech@gmail.com\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/auth/check-user",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"auth",
+								"check-user"
+							]
+						},
+						"description": "Check up user  by passing email address in the request body."
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Account Activation Mail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Email verification sent');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testaegisrider4@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/auth/resend-email",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"auth",
+								"resend-email"
+							]
+						},
+						"description": "API endpoint to resend account verification  mail to users email inbox to confirm or verify an account"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication Directory",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Ride Operations",
+			"item": [
+				{
+					"name": "Create Ride",
+					"item": [
+						{
+							"name": "Start ride",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Ride instance created successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');\r",
+											"var start_time = moment().unix();\r",
+											"pm.environment.set(\"timestamp\",start_time);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n\"timestamp\": \"{{timestamp}}\",\r\n \"is_mobile\": 1,\r\n\"start_lat\" :\"4.8942483\",\r\n\"start_lon\" :\"-1.7564726\",\r\n\"end_lat\" :\"4.915940654547596\",\r\n\"end_lon\" :\"-1.7750701698710114\",\r\n\"waypoint1_lat\":\"\" ,\r\n\"waypoint1_lon\" :\"\",\r\n\"waypoint2_lat\" :\"\",\r\n\"waypoint2_lon\" : \"\",\r\n\"waypoint3_lat\" : \"\",\r\n\"waypoint3_lon\" : \"\",\r\n\"start_location_name\" :\"Ama Akroma Avenue\",\r\n\"waypoint1_name\" : \"\",\r\n\"waypoint2_name\" : \"\",\r\n\"waypoint3_name\" : \"\",\r\n\"end_location_name\" : \"I. Adu Street, Effia Kwesimintsim\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/start-ride",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"start-ride"
+									]
+								},
+								"description": "Create a ride by passing timestamp value, is_mobile and other required field values to the request body.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride start time|  1648627237               |\n| is_mobile     |  To identify that request is from the standalone app.Accepts the value 1 | 1 |\n|start_lat | GPS latitude at the start point | 47.632|\n|start_lon | GPS longitude at the start point | 47.632|\n|end_lat | GPS latitude at the end point | 58.632|    \n|end_lon | GPS longitude at the end point | 1.632|\n|waypoint1_lat | GPS latitude at first waypoint  | 47.632|\n|waypoint1_lon | GPS longitude at first waypoint | 47.632|\n|waypoint2_lat | GPS latitude at second waypoint  | 47.632|\n|waypoint2_lon | GPS longitude at second waypoint | 47.632|\n|waypoint3_lat | GPS latitude at third waypoint  | 47.632|\n|waypoint3_lon | GPS longitude at third waypoint | 47.632|\n|start_location_name| Start location | Zürich| \n|waypoint1_name| first waypoint location | Winterthur| \n|waypoint2_name| second waypoint location | Lugano|\n|waypoint3_name| third waypoint location | Berlin|\n|end_location_name| endpoint location | Frauenfeld|"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains endpoint for ride creation / instantiation",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Filter Ride Stats",
+					"item": [
+						{
+							"name": "Filter ride stats by year( year =3 )",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a year\n* To filter ride stats by year,pass the number three(3) as value to the **filter_by** key in the request body.\neg; \"**filter_by**\" : **3**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Filter ride stats by week (week =1 )",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a week\n* To filter ride stats by week, pass the number one(1) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **1**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Filter ride stats by all time (all time = 4)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in terms of all time records\n* To filter ride stats by all time, pass the number four(4) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **4**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Filter ride stats by month (month = 2) - failure",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"filter_by\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/filter-stats",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"filter-stats"
+									]
+								},
+								"description": "Filter users ride statistics in a month\n* To filter ride stats by month pass the number two(2) as value to the **filter_by** key in the request body\neg; \"**filter_by**\" : **2**\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains endpoints for filtering ride statistics for  a particular user",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Fetch Rides",
+					"item": [
+						{
+							"name": "Fetch All_user_rides",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Retrieved user rides');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"timestamp\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch all user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**timestamp**\" \n* The order key accepts 0 or 1 which represents ascending(old) and descending(recent) orders respectively\n eg: \"**order**\": **0**  sorts all rides by old time\n eg: \"**order**\": **1**  sorts all rides that are recent\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Favorited User Rides",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Response time is less than \"+limit, function() {\r",
+											"\r",
+											"\r",
+											"// pm.expect(pm.response.responseTime).to.be.below(limit);  \r",
+											"\r",
+											"// if (pm.response.responseTime < limit) {      \r",
+											"//     console.log(\"Response Time: \" + pm.response.responseTime + \" ms\" + \" / Response Date: \" + pm.response.headers.get(\"Date\"));\r",
+											"// } else {\r",
+											"//     console.log(\"Response time was longer than \" + limit + \" ms.\");\r",
+											"// }\r",
+											"// });"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"is_favourite\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch All favorited user rides in ascending or descending order. Pass the factor, order and page number in the request body.\n* The factor key in the request body takes sorting type \n eg; \"**factor**\": \"**is_favourite**\" \n* The order key accepts 0 or 1 which represents ascending and descending orders respectively\n eg: \"**order**\": **0**  for sorting rides in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch User Rides By Ride Speed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"average_speed\",\r\n    \"order\": 1,\r\n    \"page\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch All rides in terms of ride speeds. Pass the factor, order and page number in the request body.\n* The factor key takes sorting type \n eg; \"**factor**\": \"**average_speed**\" for sorting rides in terms of average speed\n* The order key accepts 0 or 1 which represents ascending and descending orders respectively.\n eg: \"**order**\": **0**  for sorting rides by their speed in ascending order\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch  User Rides By Duration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"factor\":\"ride_duration\",\r\n    \"order\": 1,\r\n    \"page\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/statistics/all-user-rides",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"all-user-rides"
+									]
+								},
+								"description": "Fetch all rides in terms ride duration. Pass the factor, order and page number in the request body.  \n* The factor key takes sorting type \n eg; \"**factor**\": \"**ride_duration**\" for sorting rides in terms of ride duration\n* The order key accepts 0 or 1 which represent ascending and descending orders respectively\n eg: \"**order**\": **0**  sorts ride duration in the ascending order.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Single Ride Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Retrieved ride');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/statistics/single-user-ride/{{timestamp}}",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"statistics",
+										"single-user-ride",
+										"{{timestamp}}"
+									]
+								},
+								"description": "* Fetch ride data for a specific ride by passing the timestamp of the particular ride in the URL params.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify a ride|  1648627237             |"
+							},
+							"response": []
+						}
+					],
+					"description": "Contains endpoints to fetch single and all user rides",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Upload to Cloud / Backend",
+					"item": [
+						{
+							"name": "Upload Ride Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "video",
+											"type": "file",
+											"src": "Ey0BIJZYJ/video.mp4"
+										},
+										{
+											"key": "video_title",
+											"value": "New York Ride",
+											"type": "text"
+										},
+										{
+											"key": "timestamp",
+											"value": "{{timestamp}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-mobile-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-mobile-video"
+									]
+								},
+								"description": "* API endpoint to upload recorded ride videos. \n\n* Pass timestamp for the ride in the request params. \n* Pass video file to the **video** key, video title to **video_title** key and timestamp for the ride to the **timestamp** key in the request body as form data.\n\nPass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
+							},
+							"response": []
+						},
+						{
+							"name": "Upload CSV From Mobile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Validate response code is 200\", function () {\r",
+											"    pm.expect(jsonData.code).to.eq('200');\r",
+											"   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Ride calculations done');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "csv",
+											"type": "file",
+											"src": "vbIhrIyWl/ride_data.csv"
+										},
+										{
+											"key": "timestamp",
+											"value": "{{timestamp}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-csv",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-csv"
+									]
+								},
+								"description": "Endpoint to upload recorded ride data from mobile device.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n* Pass ride data file to the **csv** key  and timestamp for the ride to **timestamp** key as form data in the request body\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| csv     |    Takes sensor data file recorded from mobile | |\n| timestamp    | Ten digit unix timestamp to identify ride|  1648627237               |"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Ride Creation from Recorded Video",
+					"item": [
+						{
+							"name": "Fetch Un-processed videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/0",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"0"
+									]
+								},
+								"description": "Endpoint to fetch unprocessed uploaded ride videos\n* Pass the number **0** in the request URL params to fetch unprocessed ride videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch In-Process Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/1",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"1"
+									]
+								},
+								"description": "Endpoint to fetch in-process  videos.\n* Pass the number **1** in the request URL params to fetch in process videos.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Processed Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Successfully retrieved videos');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/2",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"2"
+									]
+								},
+								"description": "Endpoint to fetch processed  videos.\n* Pass the number **2** in the request URL params to fetch processed videos\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Without Rides",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{Base_url}}/azure-service/retrieve-inprocess-videos/3",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"retrieve-inprocess-videos",
+										"3"
+									]
+								},
+								"description": "Endpoint to fetch without-rides \n* Pass the number **3** in the request URL params to fetch without-rides\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete In-Process Video",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Video deleted successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"video_id\":\"62\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/delete-old-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"delete-old-video"
+									]
+								},
+								"description": "Endpoint to delete in-process videos from Blob storage .\n* Pass the id of video to the **video_id** key in the request body in json format\n\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Old Recorded Videos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validate response message \", function () {\r",
+											"     pm.expect(jsonData.detail).to.eq('Videos uploaded successfully');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "videos",
+											"type": "file",
+											"src": [
+												"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/⚡️LAST LAP✔️ ISLE OF MAN , MANX GRAND PRIX 2019.mp4",
+												"/C:/Users/dell/Amalitech Service Projects/Aegis Project/Aegis doc/Aegis Test Files/Ride videos/GoPro Lap at the QatarGP - MotoGP.mp4"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{Base_url}}/azure-service/upload-old-video",
+									"host": [
+										"{{Base_url}}"
+									],
+									"path": [
+										"azure-service",
+										"upload-old-video"
+									]
+								},
+								"description": "Endpoint to upload recorded GoPro videos used to create manual rides.\n* Pass videos files to the key **videos** in the request body in form data format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header."
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{Authorization}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Favorite rides",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride successfully favourited');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"is_favourite\": true,\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/statistics/favourite-ride",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"favourite-ride"
+							]
+						},
+						"description": "Endpoint to favorite and unfavorite a ride by passing a boolean (true or false) to the key **is_favourite** and ride timestamp to **timestamp** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": []
+				},
+				{
+					"name": "Rename ride",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var TimestampArray = pm.environment.get(\"TimestampArray\");\r",
+									"\r",
+									"if(!TimestampArray){\r",
+									"    TimestampArray = ['12345'];\r",
+									"}\r",
+									"\r",
+									"var singleTimestamp = TimestampArray.shift();\r",
+									"pm.environment.set(\"CurrentTimestamp\", singleTimestamp);\r",
+									"pm.environment.set(\"TimestampArray\", TimestampArray)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride renamed successfully');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ride_title\":\"Staging Ride 001\",\r\n    \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/statistics/rename-ride",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"rename-ride"
+							]
+						},
+						"description": "Endpoint to rename a particular ride. Pass the user key and timestamp in the request URL params.\n* Pass the name of ride to **ride_title** key and the ride timestamp to the **timestamp** key in the request body in json format\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ride",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json()\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Ride was deleted succesfully');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Base_url}}/statistics/delete-ride/{{timestamp}}",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"delete-ride",
+								"{{timestamp}}"
+							]
+						},
+						"description": "Endpoint to delete a user ride by passing ride timestamp to the request URL params.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header.\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ride video",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"video_id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/azure-service/delete-ride-video",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"azure-service",
+								"delete-ride-video"
+							]
+						},
+						"description": "Endpoint to delete an uploaded ride video which is used for creating ride video summarization.\n\n* To delete an uploaded video, pass video id to the **video_id** key in the request body in json format.\n\n* Pass **Bearer Authorization** access token  and user key from login response body to the request header"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Ride Video Summary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"timestamp\":\"{{timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/azure-service/create-summarized-video",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"azure-service",
+								"create-summarized-video"
+							]
+						},
+						"description": "Endpoint to initiate video summarization creation for uploaded ride videos.\n* Pass the timestamp of a created ride in the request body.\n\n* Pass **Bearer Authorization Token** from the login response to the request header\n\n| Parameters   |               Description               |        Example             |\n| -----------  |    ----------------------------------   | ---------------------------|\n| timestamp    | Ten digit Unix timestamp to identify ride|  1648627237               |"
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Single Ride Polyline Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Base_url}}/statistics/ride-polyline/{{timestamp}}",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"statistics",
+								"ride-polyline",
+								"{{timestamp}}"
+							]
+						},
+						"description": "Endpoint to retrieve polyline data for a  specific ride.\n\n* Pass timestamp of ride to the request URL params\n* Pass **Bearer Authorization Token** from the login response to the request header"
+					},
+					"response": []
+				}
+			],
+			"description": "Contains  request endpoints for ride operations",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User Account",
+			"item": [
+				{
+					"name": "Get User Profile Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Retrieved user info');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response data \", function () {\r",
+									"     pm.expect(jsonData.data).not.to.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/profile",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"profile"
+							]
+						},
+						"description": "Endpoint to get user profile details.\n* Pass **Bearer Authorization** access token from the login response  to the request header."
+					},
+					"response": []
+				},
+				{
+					"name": "Profile_image Upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile_image",
+									"type": "file",
+									"src": "jSRajC9nA/profile_pic.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/profile-image-upload",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"profile-image-upload"
+							]
+						},
+						"description": "* Endpoint to upload or update user profile photo.\n\n* Pass the image file in the request body as form-data to the key **profile_image**\n\n* Pass **Bearer Authorization** access token from the login response to the request header."
+					},
+					"response": []
+				},
+				{
+					"name": "Update_User_Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('User info updated');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n   \"full_name\": \"Aegis Dev 001\",\r\n    \"height\": \"170.00\",\r\n    \"height_unit\": \"cm\",\r\n    \"weight\": \"50\",\r\n    \"weight_unit\": \"kg\",\r\n    \"dob\": \"Mon,12 Feb 1982\",\r\n    \"bike\": \"Yamaha YBR 1215\",\r\n    \"phone\": \"546789245\",\r\n    \"mobile\": \"247951281\",\r\n    \"other_email\": \"otheremail@nodomain.com\",\r\n    \"address\": \"12 Abban Avenue\",\r\n    \"postal_code\": \"US3015\",\r\n    \"city\": \"Takoradi\",\r\n    \"country\": \"Ghana\",\r\n    \"facebook\": \"www.facebook.com/aegis\",\r\n    \"instagram\": \"www.instagram.com/aegis\",\r\n    \"twitter\": \"www.twitter.com/aegis\",\r\n    \"whatsapp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/update-user-profile",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"update-user-profile"
+							]
+						},
+						"description": "Endpoint to  update user account details.\n* Update user detail by updating appropriate field in the json request body.\n\n* Pass **Bearer Authorization** access token form the login response body to the request header."
+					},
+					"response": []
+				},
+				{
+					"name": "Cover_photo Upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate response code is 200\", function () {\r",
+									"    pm.expect(jsonData.code).to.eq('200');\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response message \", function () {\r",
+									"     pm.expect(jsonData.detail).to.eq('Uploaded image');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response data \", function () {\r",
+									"     pm.expect(jsonData.data.image_url).not.to.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cover_image",
+									"type": "file",
+									"src": "L1g_gYw6D/cover_pic.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Base_url}}/accounts/cover-image-upload",
+							"host": [
+								"{{Base_url}}"
+							],
+							"path": [
+								"accounts",
+								"cover-image-upload"
+							]
+						},
+						"description": "Endpoint to update user account cover photo.\n* Pass  the profile image file in the request body as form data  to the key **cover_image**\n* Pass the **Bearer Authorization** token to the request header."
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{Authorization}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Authorization}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
 }
