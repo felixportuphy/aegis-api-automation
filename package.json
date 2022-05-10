@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "newman run aegis_collection_ci.json -e dev_environment.json"
+    "test": "newman run ./aegis_collection_ci.json -e ./dev_environment.json"
   },
   "author": "",
   "license": "ISC",
